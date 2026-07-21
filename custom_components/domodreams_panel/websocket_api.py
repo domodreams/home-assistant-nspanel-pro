@@ -38,7 +38,8 @@ from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 from . import panel_config
-from .const import CONF_DEVICE_ID, DOMAIN, signal_screenshot
+from .adb import AdbError, get_adb
+from .const import ADB_DEFAULT_PORT, CONF_DEVICE_ID, DOMAIN, signal_screenshot
 from .notify_payload import MAX_NOTIFY_ACTIONS, async_build_notify_payload
 
 _LOGGER = logging.getLogger(__name__)
@@ -62,6 +63,7 @@ def async_register(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_screenshot)
     websocket_api.async_register_command(hass, ws_remote)
     websocket_api.async_register_command(hass, ws_notify)
+    websocket_api.async_register_command(hass, ws_adb)
     _LOGGER.debug("Registered %s websocket commands", DOMAIN)
 
 
@@ -98,6 +100,9 @@ def ws_list(
                 "ha_device_id": getattr(bridge, "ha_device_id", None),
                 "model": info.get("model"),
                 "sw_version": info.get("version"),
+                # Self-reported IP (from the retained sys/info topic) — handy in
+                # the panel picker, and to pre-fill the ADB Setup tool.
+                "ip": info.get("ip"),
                 "online": bool(getattr(bridge, "available", False)),
                 "loaded": bridge is not None,
             }
@@ -513,3 +518,71 @@ async def ws_notify(
         bridge.arm_notification_on_press(payload["id"], built.on_press)
     await bridge.async_cmd("notify", payload)
     connection.send_result(msg["id"], {"sent": "notify", "spoken": bool(msg.get("speak"))})
+
+
+@websocket_api.require_admin
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "domodreams_panel/adb",
+        #: What to do over ADB. Deliberately a FIXED verb set — the SPA's Setup
+        #: tool, not an arbitrary shell (this can install software and type
+        #: passwords onto a device on the LAN).
+        vol.Required("action"): vol.In(
+            ("probe", "keyevent", "text", "notifications", "meminfo", "install")
+        ),
+        #: The panel's ADB endpoint. This tool runs BEFORE a panel is configured
+        #: (no MQTT deviceId yet), so the address is supplied by the operator, not
+        #: derived from a config entry.
+        vol.Required("host"): str,
+        vol.Optional("port", default=ADB_DEFAULT_PORT): vol.All(
+            vol.Coerce(int), vol.Range(min=1, max=65535)
+        ),
+        #: keyevent — Android keycode (26=power, 4=back, 3=home).
+        vol.Optional("code"): vol.All(vol.Coerce(int), vol.Range(min=0, max=999)),
+        #: text — string to type via ``input text``.
+        vol.Optional("text"): str,
+    }
+)
+@websocket_api.async_response
+async def ws_adb(
+    hass: HomeAssistant,
+    connection: websocket_api.ActiveConnection,
+    msg: dict[str, Any],
+) -> None:
+    """Drive a panel over ADB-over-TCP from the config UI's Setup/Update tool.
+
+    Admin-only. Speaks ADB directly from HA (pure-python ``adb-shell``), so the
+    first call to a fresh panel raises ``auth`` until the operator taps "Allow
+    USB debugging?" on the panel screen. Every failure comes back as a WS error
+    with a stable ``code`` (``auth`` / ``connect`` / ``no_release`` / …) so the
+    SPA can show a specific hint.
+    """
+    adb = get_adb(hass)
+    action = msg["action"]
+    host = msg["host"]
+    port = msg["port"]
+    try:
+        if action == "probe":
+            res = await adb.async_probe(host, port)
+        elif action == "keyevent":
+            if "code" not in msg:
+                connection.send_error(msg["id"], "bad_request", "keyevent needs a code")
+                return
+            res = await adb.async_keyevent(host, port, msg["code"])
+        elif action == "text":
+            res = await adb.async_text(host, port, msg.get("text", ""))
+        elif action == "notifications":
+            res = await adb.async_expand_notifications(host, port)
+        elif action == "meminfo":
+            res = await adb.async_meminfo(host, port)
+        else:  # install
+            res = await adb.async_install_latest(host, port)
+    except AdbError as err:
+        connection.send_error(msg["id"], err.code, str(err))
+        return
+    except Exception as err:  # noqa: BLE001 — never leak a raw traceback to the SPA
+        _LOGGER.exception("ADB %s failed", action)
+        connection.send_error(msg["id"], "adb_error", str(err))
+        return
+
+    connection.send_result(msg["id"], {"ok": True, **res})

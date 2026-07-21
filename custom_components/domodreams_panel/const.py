@@ -55,6 +55,20 @@ SERVICE_DISCOVER = "discover"
 #: Per-device panels JSON: ``/config/domodreams_panel/{device_id}.json``.
 STORAGE_SUBDIR = DOMAIN
 
+# --- ADB provisioning (config panel Setup/Update tool) ----------------------
+#: The panel app's Android package == brand.config.json ``applicationId``. Used
+#: to install/update the APK and read its version over ADB.
+APP_PACKAGE = "it.domodreams.nspanel"
+#: Default ADB-over-TCP port the NSPanel Pro listens on.
+ADB_DEFAULT_PORT = 5555
+#: Our persisted ADB RSA key (private + a ".pub" sibling), kept under HA's
+#: ``.storage``. The panel shows a one-time "Allow USB debugging?" prompt for
+#: this key's fingerprint on first connect.
+ADB_KEY_FILE = "domodreams_panel_adbkey"
+#: Public GitHub repo whose latest Release ships the app APK the tool installs.
+GITHUB_OWNER = "domodreams"
+GITHUB_REPO = "home-assistant-nspanel-pro"
+
 
 def base_topic(device_id: str) -> str:
     """``domodreams/panel/{device_id}``."""
