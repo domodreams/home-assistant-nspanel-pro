@@ -5,7 +5,7 @@ Neumorphic buttons, clock, cover &amp; dimmer controls and an alarm keypad — a
 
 <p align="center">
   <a href="https://github.com/hacs/integration"><img src="https://img.shields.io/badge/HACS-Custom-41BDF5.svg" alt="HACS Custom"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/integration-MIT-green.svg" alt="Integration license: MIT"></a>
+  <a href="https://github.com/domodreams/home-assistant-nspanel-pro/blob/main/LICENSE"><img src="https://img.shields.io/badge/integration-MIT-green.svg" alt="Integration license: MIT"></a>
   <img src="https://img.shields.io/badge/app-free%20%2B%20premium-ff8c00.svg" alt="App: free + premium">
   <img src="https://img.shields.io/badge/Home%20Assistant-integration-03A9F4.svg" alt="Home Assistant">
   <img src="https://img.shields.io/badge/device-Sonoff%20NSPanel%20Pro-1abc9c.svg" alt="NSPanel Pro">
@@ -13,9 +13,9 @@ Neumorphic buttons, clock, cover &amp; dimmer controls and an alarm keypad — a
 </p>
 
 <p align="center">
-  <img src="images/grid.png"  width="200" alt="Neumorphic control grid">
-  <img src="images/alarm.png" width="200" alt="Alarm keypad">
-  <img src="images/clock.png" width="200" alt="Clock face">
+  <img src="https://raw.githubusercontent.com/domodreams/home-assistant-nspanel-pro/main/images/grid.png"  width="200" alt="Neumorphic control grid">
+  <img src="https://raw.githubusercontent.com/domodreams/home-assistant-nspanel-pro/main/images/alarm.png" width="200" alt="Alarm keypad">
+  <img src="https://raw.githubusercontent.com/domodreams/home-assistant-nspanel-pro/main/images/clock.png" width="200" alt="Clock face">
 </p>
 
 <p align="center"><i>Real screenshots, straight off the panel (480&times;480).</i></p>
@@ -37,12 +37,12 @@ Pages are **typed** and you swipe between them. Mix and match per panel:
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="images/grid.png" width="260" alt="Button grid"><br><b>Grid</b><br><sub>Neumorphic buttons, split tiles &amp; a scene bar</sub></td>
-    <td align="center" width="50%"><img src="images/covers.png" width="260" alt="Cover controls"><br><b>Covers &amp; dimmers</b><br><sub>Tap upper/lower half, long-press to repeat</sub></td>
+    <td align="center" width="50%"><img src="https://raw.githubusercontent.com/domodreams/home-assistant-nspanel-pro/main/images/grid.png" width="260" alt="Button grid"><br><b>Grid</b><br><sub>Neumorphic buttons, split tiles &amp; a scene bar</sub></td>
+    <td align="center" width="50%"><img src="https://raw.githubusercontent.com/domodreams/home-assistant-nspanel-pro/main/images/covers.png" width="260" alt="Cover controls"><br><b>Covers &amp; dimmers</b><br><sub>Tap upper/lower half, long-press to repeat</sub></td>
   </tr>
   <tr>
-    <td align="center" width="50%"><img src="images/clock.png" width="260" alt="Clock"><br><b>Clock</b><br><sub>Analog or digital, themeable, doubles as a screensaver</sub></td>
-    <td align="center" width="50%"><img src="images/alarm.png" width="260" alt="Alarm keypad"><br><b>Alarm</b><br><sub>Full Alarmo keypad — arm, disarm, status</sub></td>
+    <td align="center" width="50%"><img src="https://raw.githubusercontent.com/domodreams/home-assistant-nspanel-pro/main/images/clock.png" width="260" alt="Clock"><br><b>Clock</b><br><sub>Analog or digital, themeable, doubles as a screensaver</sub></td>
+    <td align="center" width="50%"><img src="https://raw.githubusercontent.com/domodreams/home-assistant-nspanel-pro/main/images/alarm.png" width="260" alt="Alarm keypad"><br><b>Alarm</b><br><sub>Full Alarmo keypad — arm, disarm, status</sub></td>
   </tr>
 </table>
 
@@ -113,7 +113,7 @@ adb install -r app-release.apk
 
 Then launch **DomoDreams Panel** on the device (or set it as the Home app so it autostarts on boot).
 
-📖 **Full step-by-step, including how to enable ADB and set kiosk/autostart, is in [`docs/INSTALL-APK.md`](docs/INSTALL-APK.md).**
+📖 **Full step-by-step, including how to enable ADB and set kiosk/autostart, is in [`docs/INSTALL-APK.md`](https://github.com/domodreams/home-assistant-nspanel-pro/blob/main/docs/INSTALL-APK.md).**
 
 ---
 
@@ -121,9 +121,9 @@ Then launch **DomoDreams Panel** on the device (or set it as the Home app so it 
 
 Everything is edited from the **NSPanel Pro** sidebar panel (admin-only) — pick entities, arrange tiles, choose page types, set the theme. Per-panel device settings (theme, sizes, brightness) can also be tweaked **on the device itself**:
 
-<p align="center"><img src="images/settings.png" width="300" alt="On-device settings"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/domodreams/home-assistant-nspanel-pro/main/images/settings.png" width="300" alt="On-device settings"></p>
 
-The layout schema ships with the integration at [`custom_components/domodreams_panel/panels.schema.json`](custom_components/domodreams_panel/panels.schema.json) and is validated on both sides, so a panel and its config can never silently disagree. Starter examples live in [`config-examples/`](config-examples/).
+The layout schema ships with the integration at [`custom_components/domodreams_panel/panels.schema.json`](https://github.com/domodreams/home-assistant-nspanel-pro/blob/main/custom_components/domodreams_panel/panels.schema.json) and is validated on both sides, so a panel and its config can never silently disagree. Starter examples live in [`config-examples/`](https://github.com/domodreams/home-assistant-nspanel-pro/tree/main/config-examples/).
 
 ## How it works
 
@@ -140,7 +140,7 @@ NSPanel Pro (app)  ──MQTT──►  domodreams/panel/{device}/event      (bu
 
 ## License &amp; product
 
-- The **Home Assistant integration** in this repository is released under the **MIT License** — see [LICENSE](LICENSE).
+- The **Home Assistant integration** in this repository is released under the **MIT License** — see [LICENSE](https://github.com/domodreams/home-assistant-nspanel-pro/blob/main/LICENSE).
 - The companion **DomoDreams Panel** app is a separate product: **free to use with an on-screen watermark**, with a one-time **Premium** unlock to remove it.
 
 ---
