@@ -18,6 +18,9 @@ jobs:
         uses: "hacs/action@main"
         with:
           category: "integration"
+          # This is distributed as a HACS *custom* repository, not the default
+          # store, so the domain isn't in home-assistant/brands. Skip that check.
+          ignore: "brands"
 
   validate-hassfest:
     name: hassfest
