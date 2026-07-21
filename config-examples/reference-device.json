@@ -1,0 +1,18 @@
+{
+  "defaultPage": 0,
+  "inactivityTimeout": 120,
+  "theme": "nordic-oak",
+  "screensaver": {
+    "after": 180,
+    "type": "clock",
+    "dimLevel": 0.15,
+    "wakeOnProximity": true,
+    "proximity": { "on": 40, "off": 15 }
+  },
+  "clockFace": "analog",
+  "clockAppearance": "dark",
+  "clockAccent": "#e6a23c",
+  "clockFormat24h": true,
+  "labelFontSize": 19,
+  "iconSize": 32
+}

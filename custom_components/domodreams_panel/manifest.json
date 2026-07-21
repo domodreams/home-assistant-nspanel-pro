@@ -1,0 +1,14 @@
+{
+  "domain": "domodreams_panel",
+  "name": "DomoDreams Panel",
+  "codeowners": ["@domodreams"],
+  "config_flow": true,
+  "dependencies": ["mqtt", "http", "frontend", "websocket_api", "media_source"],
+  "documentation": "https://github.com/domodreams/home-assistant-nspanel-pro",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/domodreams/home-assistant-nspanel-pro/issues",
+  "mqtt": ["domodreams/panel/+/avail"],
+  "requirements": [],
+  "version": "0.13.0"
+}

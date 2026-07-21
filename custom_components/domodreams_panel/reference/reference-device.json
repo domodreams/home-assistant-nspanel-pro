@@ -1,0 +1,23 @@
+{
+  "defaultPage": 0,
+  "inactivityTimeout": 120,
+  "theme": "cream",
+  "screensaver": {
+    "after": 180,
+    "type": "clock",
+    "dimLevel": 0.15,
+    "wakeOnProximity": true,
+    "proximity": { "on": 40, "off": 15 }
+  },
+  "clockFace": "analog",
+  "clockAppearance": "dark",
+  "clockAccent": "#e6a23c",
+  "clockFormat24h": true,
+  "autoBrightness": {
+    "enabled": true,
+    "nightThresholdLux": 130,
+    "dayBrightness": 100,
+    "nightBrightness": 30,
+    "screensaverDropPoints": 10
+  }
+}

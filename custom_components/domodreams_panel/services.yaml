@@ -1,0 +1,271 @@
+push_config:
+  name: Push config
+  description: >-
+    Validate the panel's config file (/config/domodreams_panel/<device_id>.json)
+    against the schema and publish it (config/panels + config/device) retained so
+    the panel re-renders.
+  target:
+    device:
+      integration: domodreams_panel
+
+wake:
+  name: Wake
+  description: Wake the panel from its screensaver at full brightness.
+  target:
+    device:
+      integration: domodreams_panel
+
+set_screen:
+  name: Set screen
+  description: Turn the panel screen on, off (screensaver), or dim it.
+  target:
+    device:
+      integration: domodreams_panel
+  fields:
+    action:
+      name: Action
+      required: true
+      selector:
+        select:
+          options:
+            - "on"
+            - "off"
+            - dim
+    brightness:
+      name: Brightness
+      description: Brightness 0..1 (used with action "dim").
+      selector:
+        number:
+          min: 0
+          max: 1
+          step: 0.05
+
+page:
+  name: Go to page
+  description: Navigate the panel to a page by index or id.
+  target:
+    device:
+      integration: domodreams_panel
+  fields:
+    index:
+      name: Page index
+      selector:
+        number:
+          min: 0
+          mode: box
+    id:
+      name: Page id
+      selector:
+        text:
+
+ping:
+  name: Ping
+  description: >-
+    Ping the panel; the round-trip time is emitted on the
+    domodreams_panel_pong bus event and logged.
+  target:
+    device:
+      integration: domodreams_panel
+
+screenshot:
+  name: Screenshot
+  description: Request a fresh screenshot; the panel's camera entity updates on reply.
+  target:
+    device:
+      integration: domodreams_panel
+
+set_alarm:
+  name: Set alarm
+  description: Set (or clear) the panel's built-in alarm clock.
+  target:
+    device:
+      integration: domodreams_panel
+  fields:
+    enabled:
+      name: Enabled
+      required: true
+      selector:
+        boolean:
+    hour:
+      name: Hour
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 23
+          mode: box
+    minute:
+      name: Minute
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 59
+          mode: box
+
+play_media:
+  name: Play media
+  description: Play a sound/media clip on the panel.
+  target:
+    device:
+      integration: domodreams_panel
+  fields:
+    url:
+      name: URL
+      selector:
+        text:
+    asset:
+      name: Bundled asset
+      selector:
+        text:
+    volume:
+      name: Volume
+      selector:
+        number:
+          min: 0
+          max: 1
+          step: 0.05
+
+stop_media:
+  name: Stop media
+  description: Stop any media playback (or the ringing alarm) on the panel.
+  target:
+    device:
+      integration: domodreams_panel
+
+notify:
+  name: Notify
+  description: >-
+    Show a notification on the panel — icon or image, title, message, severity,
+    a sound or spoken text, and up to three answer buttons. Which button was
+    pressed (or that it was dismissed / expired) is reported on the
+    domodreams_panel_notification bus event.
+  target:
+    device:
+      integration: domodreams_panel
+  fields:
+    title:
+      name: Title
+      selector:
+        text:
+    message:
+      name: Message
+      selector:
+        text:
+          multiline: true
+    level:
+      name: Level
+      description: Severity — drives the colour. Default info.
+      selector:
+        select:
+          options:
+            - info
+            - success
+            - warning
+            - error
+    priority:
+      name: Priority
+      description: >-
+        normal shows a banner and does NOT wake a sleeping panel (it appears at
+        the next wake); high takes the whole screen and wakes it. Defaults to
+        high for level "error", normal otherwise.
+      selector:
+        select:
+          options:
+            - normal
+            - high
+    icon:
+      name: Icon
+      description: Panel icon name (the same set the button editor offers).
+      selector:
+        text:
+    image:
+      name: Image URL
+      description: Shown instead of the icon, e.g. a camera snapshot.
+      selector:
+        text:
+    sound:
+      name: Sound
+      description: >-
+        A bundled panel sound (ding, alarm_beep, alarm, alarmo, siren), a URL,
+        or a file picked from Home Assistant's media. Plays over the music, which
+        is ducked and restored around it. "ding" is also what a notification
+        plays on its own when it arrives while the panel is asleep.
+      selector:
+        text:
+    speak:
+      name: Speak
+      description: >-
+        Text to say out loud on the panel. Without a title or message the
+        notification is voice-only — nothing appears on screen.
+      selector:
+        text:
+          multiline: true
+    tts_engine:
+      name: Text-to-speech engine
+      description: Defaults to Home Assistant's default engine.
+      selector:
+        text:
+    language:
+      name: Language
+      description: Language for the spoken text (engine default when empty).
+      selector:
+        text:
+    actions:
+      name: Buttons
+      description: >-
+        Up to three answer buttons, e.g. [{"id": "ack", "label": "OK"}]. A plain
+        list of words works too. The panel shows a notification with buttons
+        full-screen and waits for an answer. Each button may carry an "on_press"
+        that Home Assistant runs when it is pressed — either its own syntax
+        ({action: cover.open_cover, target: {entity_id: cover.x}}) or the panel's
+        binding form ({action: call, service: cover.open_cover, entity_id:
+        cover.x}); a list of either runs in order. Every press also fires the
+        domodreams_panel_notification event, so on_press and an automation can
+        be used together or separately.
+      selector:
+        object:
+    timeout:
+      name: Timeout
+      description: Seconds on screen. 0 keeps it until the user answers. Default 60.
+      selector:
+        number:
+          min: 0
+          max: 3600
+          mode: box
+    id:
+      name: Id
+      description: >-
+        Re-sending the same id replaces that notification instead of queueing a
+        second one, and lets you clear it later.
+      selector:
+        text:
+
+notify_clear:
+  name: Clear notification
+  description: Remove a notification from the panel — one by id, or all of them.
+  target:
+    device:
+      integration: domodreams_panel
+  fields:
+    id:
+      name: Id
+      description: Leave empty to clear every notification.
+      selector:
+        text:
+
+discover:
+  name: Discover panels
+  description: >-
+    Broadcast a discovery probe and collect replies from every online panel.
+    Each reply is logged and emitted on the domodreams_panel_discovery bus event;
+    the found panels are also returned as the service response.
+  fields:
+    timeout:
+      name: Timeout
+      description: Seconds to wait for replies (default 2).
+      selector:
+        number:
+          min: 1
+          max: 10
+          step: 0.5
