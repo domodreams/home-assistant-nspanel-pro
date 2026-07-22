@@ -32,14 +32,21 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.components import websocket_api
+from homeassistant.components import mqtt, websocket_api
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 from . import panel_config
 from .adb import AdbError, get_adb
-from .const import ADB_DEFAULT_PORT, CONF_DEVICE_ID, DOMAIN, signal_screenshot
+from .const import (
+    ADB_DEFAULT_PORT,
+    CONF_DEVICE_ID,
+    DOMAIN,
+    RESERVED_DEVICE_ID,
+    base_topic,
+    signal_screenshot,
+)
 from .notify_payload import MAX_NOTIFY_ACTIONS, async_build_notify_payload
 
 _LOGGER = logging.getLogger(__name__)
@@ -66,6 +73,7 @@ def async_register(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_adb)
     websocket_api.async_register_command(hass, ws_adb_install)
     websocket_api.async_register_command(hass, ws_app_latest)
+    websocket_api.async_register_command(hass, ws_delete_panel)
     _LOGGER.debug("Registered %s websocket commands", DOMAIN)
 
 
@@ -684,3 +692,108 @@ async def ws_app_latest(
         connection.send_error(msg["id"], "github", str(err))
         return
     connection.send_result(msg["id"], {"ok": True, **res})
+
+
+# --- delete a panel (ADMIN, explicit confirmation) ---------------------------
+#
+# Removes a panel completely: its config entry, EVERY retained MQTT topic under
+# its ``{TOPIC_PREFIX}/{device_id}`` namespace (config + state the integration
+# published AND avail/event/sys the panel published), and its on-disk config
+# files. Used to evict a panel that auto-discovery surfaced by mistake — e.g. a
+# remote panel that connected to the broker and got listed here.
+#
+# ``confirm`` MUST equal the device_id: a mistyped/foreign id can't delete the
+# wrong panel. Removing the entry first unloads the bridge, so nothing
+# republishes retained topics while we clear them.
+
+
+async def _clear_retained(hass: HomeAssistant, device_id: str) -> list[str]:
+    """Publish an empty retained payload to every retained topic under the
+    panel's namespace, clearing them from the broker. Returns the topics hit."""
+    wild = f"{base_topic(device_id)}/#"
+    topics: set[str] = set()
+    done = asyncio.Event()
+
+    @callback
+    def _collect(m: mqtt.ReceiveMessage) -> None:
+        # Retained topics arrive right after SUBACK; a real (non-empty) retained
+        # payload is one we need to clear. Empty payload = already cleared.
+        if m.retain and m.payload not in (b"", ""):
+            topics.add(m.topic)
+
+    unsub = await mqtt.async_subscribe(hass, wild, _collect)
+    try:
+        # Give the broker a beat to replay all retained messages.
+        await asyncio.sleep(1.5)
+    finally:
+        unsub()
+    for topic in sorted(topics):
+        await mqtt.async_publish(hass, topic, "", retain=True)
+    return sorted(topics)
+
+
+@websocket_api.require_admin
+@websocket_api.websocket_command(
+    {
+        vol.Required("type"): "domodreams_panel/delete_panel",
+        vol.Required("device_id"): str,
+        # Must equal device_id — an explicit, typed confirmation.
+        vol.Required("confirm"): str,
+    }
+)
+@websocket_api.async_response
+async def ws_delete_panel(
+    hass: HomeAssistant,
+    connection: websocket_api.ActiveConnection,
+    msg: dict[str, Any],
+) -> None:
+    """Evict a panel: remove its config entry, clear its retained MQTT topics,
+    and delete its on-disk config files. Requires ``confirm == device_id``."""
+    device_id = msg["device_id"]
+    if msg["confirm"] != device_id:
+        connection.send_error(
+            msg["id"],
+            "not_confirmed",
+            "confirmation must repeat the panel's id exactly",
+        )
+        return
+    if device_id == RESERVED_DEVICE_ID:
+        connection.send_error(msg["id"], "reserved", "that id is reserved")
+        return
+
+    # 1) Remove the config entry first — this unloads the bridge, so it stops
+    #    republishing retained config/state while we clear the broker.
+    entry_removed = False
+    for entry in hass.config_entries.async_entries(DOMAIN):
+        if entry.data.get(CONF_DEVICE_ID) == device_id:
+            await hass.config_entries.async_remove(entry.entry_id)
+            entry_removed = True
+            break
+
+    # 2) Clear every retained topic under the panel's namespace.
+    try:
+        topics_cleared = await _clear_retained(hass, device_id)
+    except Exception as err:  # noqa: BLE001
+        _LOGGER.warning("delete_panel: clearing retained failed: %s", err)
+        topics_cleared = []
+
+    # 3) Delete the on-disk config files.
+    files_deleted = await panel_config.async_delete(hass, device_id)
+
+    _LOGGER.info(
+        "delete_panel %s: entry_removed=%s, %d retained topics cleared, files=%s",
+        device_id,
+        entry_removed,
+        len(topics_cleared),
+        files_deleted,
+    )
+    connection.send_result(
+        msg["id"],
+        {
+            "ok": True,
+            "device_id": device_id,
+            "entry_removed": entry_removed,
+            "topics_cleared": topics_cleared,
+            "files_deleted": files_deleted,
+        },
+    )

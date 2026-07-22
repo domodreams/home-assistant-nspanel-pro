@@ -294,6 +294,24 @@ async def async_write_device(
     await hass.async_add_executor_job(_write_json, device_path(hass, device_id), doc)
 
 
+def _delete_files(panels: Path, device: Path) -> list[str]:
+    deleted: list[str] = []
+    for p in (panels, device):
+        try:
+            p.unlink()
+            deleted.append(p.name)
+        except FileNotFoundError:
+            pass
+    return deleted
+
+
+async def async_delete(hass: HomeAssistant, device_id: str) -> list[str]:
+    """Remove a panel's on-disk config files. Returns the names deleted."""
+    return await hass.async_add_executor_job(
+        _delete_files, panels_path(hass, device_id), device_path(hass, device_id)
+    )
+
+
 # --- revisions (optimistic concurrency for the config panel) ------------------
 #
 # A revision identifies the exact on-disk state of BOTH config files. Clients
