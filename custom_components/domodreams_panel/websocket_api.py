@@ -65,6 +65,7 @@ def async_register(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_notify)
     websocket_api.async_register_command(hass, ws_adb)
     websocket_api.async_register_command(hass, ws_adb_install)
+    websocket_api.async_register_command(hass, ws_app_latest)
     _LOGGER.debug("Registered %s websocket commands", DOMAIN)
 
 
@@ -646,3 +647,27 @@ async def ws_adb_install(
                 mid, {"step": "error", "code": "adb_error", "message": str(err)}
             )
         )
+
+
+@websocket_api.require_admin
+@websocket_api.websocket_command({vol.Required("type"): "domodreams_panel/app_latest"})
+@websocket_api.async_response
+async def ws_app_latest(
+    hass: HomeAssistant,
+    connection: websocket_api.ActiveConnection,
+    msg: dict[str, Any],
+) -> None:
+    """Latest available app version (from the GitHub release) — no device needed.
+
+    The Setup tool calls this to tell the operator whether the app installed on
+    the panel is already up to date or an update is available.
+    """
+    try:
+        res = await get_adb(hass).async_latest_version()
+    except AdbError as err:
+        connection.send_error(msg["id"], err.code, str(err))
+        return
+    except Exception as err:  # noqa: BLE001
+        connection.send_error(msg["id"], "github", str(err))
+        return
+    connection.send_result(msg["id"], {"ok": True, **res})

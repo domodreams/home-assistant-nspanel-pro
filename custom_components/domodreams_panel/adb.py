@@ -325,6 +325,12 @@ class PanelAdb:
         )
         return {"tag": tag, "asset": name, "version": version, "package": APP_PACKAGE}
 
+    async def async_latest_version(self) -> dict[str, Any]:
+        """Latest available app version from the GitHub release (no ADB needed)."""
+        _url, tag, name = await self._fetch_latest_apk_url()
+        version = tag[1:] if tag.startswith("v") else tag
+        return {"tag": tag, "version": version or None, "asset": name}
+
     async def _fetch_latest_apk_url(self) -> tuple[str, str, str]:
         """Return (download_url, tag, asset_name) for the latest release APK."""
         session = async_get_clientsession(self._hass)
