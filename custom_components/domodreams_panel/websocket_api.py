@@ -529,7 +529,7 @@ async def ws_notify(
         #: tool, not an arbitrary shell (this can install software and type
         #: passwords onto a device on the LAN).
         vol.Required("action"): vol.In(
-            ("probe", "keyevent", "text", "notifications", "meminfo")
+            ("probe", "keyevent", "text", "notifications", "meminfo", "set_home")
         ),
         #: The panel's ADB endpoint. This tool runs BEFORE a panel is configured
         #: (no MQTT deviceId yet), so the address is supplied by the operator, not
@@ -574,8 +574,10 @@ async def ws_adb(
             res = await adb.async_text(host, port, msg.get("text", ""))
         elif action == "notifications":
             res = await adb.async_expand_notifications(host, port)
-        else:  # meminfo
+        elif action == "meminfo":
             res = await adb.async_meminfo(host, port)
+        else:  # set_home
+            res = await adb.async_set_home(host, port)
     except AdbError as err:
         connection.send_error(msg["id"], err.code, str(err))
         return

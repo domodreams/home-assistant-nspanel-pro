@@ -256,6 +256,27 @@ class PanelAdb:
         )
         return {"output": out}
 
+    async def async_set_home(self, host: str, port: int) -> dict[str, Any]:
+        """Make the app the device's default Home (launcher) activity."""
+        signer = await self._get_signer()
+        out = await self._hass.async_add_executor_job(
+            self._shell_blk,
+            host,
+            port,
+            signer,
+            f"cmd package set-home-activity {APP_PACKAGE}/com.domopanel.MainActivity",
+        )
+        low = (out or "").lower()
+        if "success" not in low and any(
+            k in low for k in ("error", "exception", "failure", "not found")
+        ):
+            raise AdbError(
+                "set_home_failed",
+                "Couldn't set the app as Home — is it installed (and Home-capable)? "
+                f"({out.strip() or 'no output'})",
+            )
+        return {"output": (out or "").strip()}
+
     def _shell_blk(self, host: str, port: int, signer: Any, cmd: str) -> str:
         return self._run(host, port, signer, lambda d: d.shell(cmd) or "")
 

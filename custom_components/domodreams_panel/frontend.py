@@ -30,7 +30,7 @@ PANEL_URL_PATH = "domodreams_panel"
 #: Custom element tag defined by the built bundle (see web/src/main.tsx).
 PANEL_ELEMENT = "domodreams-panel-config"
 #: Bumped to bust the frontend cache when the bundle changes materially.
-PANEL_VERSION = "42"
+PANEL_VERSION = "43"
 
 _WWW_DIR = Path(__file__).parent / "www"
 _BUNDLE = "domodreams-panel-config.js"
