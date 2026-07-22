@@ -26,7 +26,6 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
-import tempfile
 from typing import Any, Callable
 
 import aiohttp
@@ -42,8 +41,16 @@ _DATA_KEY = "domodreams_panel_adb"
 
 #: On-device staging path for the APK before ``pm install``.
 _REMOTE_APK = "/data/local/tmp/domodreams_panel_update.apk"
-#: Generous socket timeout — a ~30 MB push over Wi-Fi takes a while.
-_XFER_TIMEOUT = 180.0
+#: Socket timeout for the install connection. Must exceed the read timeouts
+#: below, so a silent curl download doesn't trip the transport layer first.
+_XFER_TIMEOUT = 320.0
+#: The panel downloads the APK itself with curl (adb-shell's pure-python push
+#: hangs on this device's adbd). curl is silent, so adb-shell sees no shell
+#: output until it finishes — the read timeout must cover the whole download.
+_DL_CURL_TIMEOUT = 240
+_DL_READ_TIMEOUT = 300.0
+#: Read timeout for ``pm install`` (verifies + optimizes the APK on-device).
+_INSTALL_READ_TIMEOUT = 180.0
 #: Short socket timeout for tiny shell round-trips.
 _OP_TIMEOUT = 20.0
 #: How long ``connect`` waits for the user to tap "Allow USB debugging?".
@@ -263,16 +270,42 @@ class PanelAdb:
         return text[:60000]
 
     # --- install / update ---------------------------------------------------
-    async def async_install_latest(self, host: str, port: int) -> dict[str, Any]:
-        """Download the latest GitHub release APK and ``pm install`` it."""
-        apk, tag, name = await self._fetch_latest_apk()
+    async def async_install_latest(
+        self, host: str, port: int, progress: Callable[..., None] | None = None
+    ) -> dict[str, Any]:
+        """Install/update the app by having the PANEL download the release APK.
+
+        adb-shell's pure-python file *push* hangs on this device's adbd, but plain
+        shell commands are reliable and the panel has ``curl`` + working TLS to
+        GitHub â so the panel fetches the APK itself and ``pm install``s it.
+        ``progress(message, level)`` (optional) is called on the event loop with
+        short human-readable steps so the GUI can show a live log.
+        """
+        say = progress or (lambda *a, **k: None)
+
+        say("Finding the latest release on GitHub…")
+        url, tag, name = await self._fetch_latest_apk_url()
+        say(f"Latest release {tag} — {name}.", "ok")
+
         signer = await self._get_signer()
+        say(f"Panel is downloading {name} from GitHub… (this can take a bit)")
+        size = await self._hass.async_add_executor_job(
+            self._download_blk, host, port, signer, url
+        )
+        say(f"Downloaded {size:,} bytes to the panel.", "ok")
+
+        say("Installing on the panel (pm install)…")
         version = await self._hass.async_add_executor_job(
-            self._install_blk, host, port, signer, apk
+            self._pm_install_blk, host, port, signer
+        )
+        say(
+            f"Installed{(' v' + version) if version else ''} and launched — done.",
+            "ok",
         )
         return {"tag": tag, "asset": name, "version": version, "package": APP_PACKAGE}
 
-    async def _fetch_latest_apk(self) -> tuple[bytes, str, str]:
+    async def _fetch_latest_apk_url(self) -> tuple[str, str, str]:
+        """Return (download_url, tag, asset_name) for the latest release APK."""
         session = async_get_clientsession(self._hass)
         api = (
             f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}"
@@ -308,81 +341,93 @@ class PanelAdb:
             raise AdbError("github", f"Couldn't reach GitHub: {err}") from err
 
         tag = data.get("tag_name") or "latest"
-        assets = data.get("assets") or []
         asset = next(
-            (a for a in assets if str(a.get("name", "")).lower().endswith(".apk")),
+            (
+                a
+                for a in (data.get("assets") or [])
+                if str(a.get("name", "")).lower().endswith(".apk")
+            ),
             None,
         )
         if not asset:
             raise AdbError(
-                "no_asset",
-                f"The latest release ({tag}) has no .apk asset attached.",
+                "no_asset", f"The latest release ({tag}) has no .apk asset attached."
             )
-        url = asset.get("browser_download_url")
-        name = asset.get("name") or "app-release.apk"
-        try:
-            async with session.get(
-                url, timeout=aiohttp.ClientTimeout(total=_XFER_TIMEOUT)
-            ) as resp:
-                if resp.status != 200:
-                    raise AdbError(
-                        "download", f"Downloading the APK failed (HTTP {resp.status})."
-                    )
-                content = await resp.read()
-        except asyncio.TimeoutError as err:
+        return (
+            str(asset.get("browser_download_url")),
+            tag,
+            str(asset.get("name") or "app-release.apk"),
+        )
+
+    def _download_blk(self, host: str, port: int, signer: Any, url: str) -> int:
+        """On the panel: curl the APK to a temp path. Returns the byte size."""
+        remote = _REMOTE_APK
+        # -L follows the release -> CDN redirect; --fail => nonzero on HTTP error.
+        # curl is silent (-sS): nothing is read until it finishes, so the read
+        # timeout must cover the whole download (see _DL_READ_TIMEOUT).
+        cmd = (
+            f"rm -f {remote}; "
+            f"curl -L -sS --fail -m {_DL_CURL_TIMEOUT} -o {remote} '{url}' "
+            f"&& echo __DL_OK__ $(wc -c < {remote}) "
+            f"|| echo __DL_FAIL__ rc=$?"
+        )
+        out = self._run(
+            host,
+            port,
+            signer,
+            lambda d: d.shell(cmd, read_timeout_s=_DL_READ_TIMEOUT) or "",
+            xfer=True,
+        )
+        if "__DL_OK__" not in out:
             raise AdbError(
-                "download", "Timed out downloading the APK from GitHub."
-            ) from err
-        except aiohttp.ClientError as err:
-            raise AdbError("download", f"Downloading the APK failed: {err}") from err
+                "download",
+                "The panel couldn't download the APK from GitHub — check its "
+                f"internet access. (curl: {out.strip()[:200] or 'no output'})",
+            )
+        sizes = [int(tok) for tok in out.split() if tok.isdigit()]
+        return sizes[-1] if sizes else 0
 
-        if not content:
-            raise AdbError("download", "Downloaded an empty APK.")
-        return content, tag, name
+    def _pm_install_blk(self, host: str, port: int, signer: Any) -> str | None:
+        """On the panel: ``pm install`` the downloaded APK, then read its version."""
+        remote = _REMOTE_APK
 
-    def _install_blk(
-        self, host: str, port: int, signer: Any, apk_bytes: bytes
-    ) -> str | None:
-        fd, tmp = tempfile.mkstemp(suffix=".apk", prefix="ddpanel_")
-        try:
-            with os.fdopen(fd, "wb") as fh:
-                fh.write(apk_bytes)
-
-            def fn(device: Any) -> str | None:
-                device.push(tmp, _REMOTE_APK)
-                out = (
-                    device.shell(f"pm install -r -d {_REMOTE_APK}", read_timeout_s=120)
-                    or ""
+        def fn(device: Any) -> str | None:
+            out = (
+                device.shell(
+                    f"pm install -r -d {remote}", read_timeout_s=_INSTALL_READ_TIMEOUT
                 )
-                try:  # best-effort on-device cleanup
-                    device.shell(f"rm -f {_REMOTE_APK}")
-                except Exception:  # noqa: BLE001
-                    pass
-                if "Success" not in out:
-                    low = out.lower()
-                    if (
-                        "signatures do not match" in low
-                        or "update_incompatible" in low
-                        or "inconsistent_certificates" in low
-                    ):
-                        raise AdbError(
-                            "signature",
-                            "A build with a different signature is already "
-                            f"installed. Uninstall it first (adb uninstall "
-                            f"{APP_PACKAGE}) — that wipes its local data — "
-                            "then install again.",
-                        )
-                    raise AdbError(
-                        "install_failed",
-                        f"pm install failed: {out.strip() or 'unknown error'}",
-                    )
-                return _parse_version_name(
-                    device.shell(f"dumpsys package {APP_PACKAGE} | grep versionName")
-                )
-
-            return self._run(host, port, signer, fn, xfer=True)
-        finally:
-            try:
-                os.unlink(tmp)
-            except OSError:
+                or ""
+            )
+            try:  # best-effort on-device cleanup
+                device.shell(f"rm -f {remote}")
+            except Exception:  # noqa: BLE001
                 pass
+            if "Success" not in out:
+                low = out.lower()
+                if (
+                    "signatures do not match" in low
+                    or "update_incompatible" in low
+                    or "inconsistent_certificates" in low
+                ):
+                    raise AdbError(
+                        "signature",
+                        "A build with a different signature is already installed. "
+                        f"Uninstall it first (adb uninstall {APP_PACKAGE}) — that "
+                        "wipes its local data — then install again.",
+                    )
+                raise AdbError(
+                    "install_failed",
+                    f"pm install failed: {out.strip() or 'unknown error'}",
+                )
+            version = _parse_version_name(
+                device.shell(f"dumpsys package {APP_PACKAGE} | grep versionName")
+            )
+            try:  # best-effort: launch the app so the panel comes up ready
+                device.shell(
+                    f"monkey -p {APP_PACKAGE} -c android.intent.category.LAUNCHER 1"
+                )
+            except Exception:  # noqa: BLE001
+                pass
+            return version
+
+        return self._run(host, port, signer, fn, xfer=True)
