@@ -277,6 +277,46 @@ class PanelAdb:
             )
         return {"output": (out or "").strip()}
 
+    async def async_unset_home(self, host: str, port: int) -> dict[str, Any]:
+        """Remove the app as default Home — point Home at Android's blank
+        ``FallbackHome`` so pressing Home does nothing (an empty screen)."""
+        signer = await self._get_signer()
+        out = await self._hass.async_add_executor_job(
+            self._shell_blk,
+            host,
+            port,
+            signer,
+            "cmd package set-home-activity com.android.settings/.FallbackHome",
+        )
+        low = (out or "").lower()
+        if "success" not in low and any(
+            k in low for k in ("error", "exception", "failure", "not found")
+        ):
+            raise AdbError(
+                "unset_home_failed",
+                f"Couldn't unset the Home app: {out.strip() or 'no output'}",
+            )
+        return {"output": (out or "").strip()}
+
+    async def async_reboot(self, host: str, port: int) -> dict[str, Any]:
+        """Reboot the device. The ADB socket drops as it goes down — that IS the
+        success signal, so a read error after the command is sent is expected."""
+        signer = await self._get_signer()
+        await self._hass.async_add_executor_job(self._reboot_blk, host, port, signer)
+        return {}
+
+    def _reboot_blk(self, host: str, port: int, signer: Any) -> None:
+        def fn(device: Any) -> None:
+            try:
+                device.shell(
+                    "setprop persist.adb.tcp.port 5555; svc power reboot; reboot",
+                    read_timeout_s=4,
+                )
+            except Exception:  # noqa: BLE001 — socket drops as the device reboots
+                pass
+
+        self._run(host, port, signer, fn)
+
     def _shell_blk(self, host: str, port: int, signer: Any, cmd: str) -> str:
         return self._run(host, port, signer, lambda d: d.shell(cmd) or "")
 
