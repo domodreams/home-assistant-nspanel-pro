@@ -4,17 +4,21 @@
     "step": {
       "user": {
         "title": "Add a DomoDreams panel",
-        "description": "Select a discovered panel, or choose manual entry.",
+        "description": "Pick a discovered panel, or set up a new one.",
         "data": {
           "device_id": "Panel"
         }
       },
       "manual": {
-        "title": "Add a DomoDreams panel",
-        "description": "Enter the panel's device ID (its instanceName setting).",
+        "title": "Set up a new panel",
+        "description": "Choose an id for this panel — you'll set the **same value** as the panel's **instanceName** in the app (its Settings screen). Leave it blank to generate one.\n\nAlready have the panel running and connected to MQTT? Cancel and add it from the **Discovered** card instead — no id needed.",
         "data": {
-          "device_id": "Device ID",
-          "name": "Friendly name"
+          "device_id": "Device ID (optional)",
+          "name": "Friendly name (optional)"
+        },
+        "data_description": {
+          "device_id": "The panel's instanceName. Pick something short like living-room and set the same value in the app. Blank = auto-generated.",
+          "name": "Shown in Home Assistant. Defaults to the device ID."
         }
       },
       "confirm": {

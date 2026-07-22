@@ -14,6 +14,7 @@ Three ways in:
 from __future__ import annotations
 
 import logging
+import secrets
 from typing import Any
 
 import voluptuous as vol
@@ -33,6 +34,12 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 _MANUAL = "__manual__"
+
+
+def _random_device_id() -> str:
+    """A fresh, app-style deviceId (mirrors the app's random 6-char suffix)."""
+    alphabet = "abcdefghijklmnopqrstuvwxyz0123456789"
+    return "panel-" + "".join(secrets.choice(alphabet) for _ in range(6))
 
 
 class DomoDreamsPanelConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -96,7 +103,7 @@ class DomoDreamsPanelConfigFlow(ConfigFlow, domain=DOMAIN):
         if not options:
             return await self.async_step_manual()
 
-        options[_MANUAL] = "Enter a device ID manually…"
+        options[_MANUAL] = "➕ Set up a new panel (not listed)…"
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema({vol.Required(CONF_DEVICE_ID): vol.In(options)}),
@@ -105,25 +112,33 @@ class DomoDreamsPanelConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_manual(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Free-text deviceId (+ friendly name)."""
+        """Set up a NEW panel by CHOOSING an id — no live panel required.
+
+        The id you pick here IS the panel's ``instanceName``: set the same value
+        in the app (Settings screen) and the two line up. Leave it blank and one
+        is generated for you. This step is also how the sidebar config panel
+        first appears, so the Setup/Update tool is reachable before a panel is
+        even online (chicken-and-egg: you need the tool to bring a panel up, but
+        the tool lives behind an entry).
+        """
         errors: dict[str, str] = {}
         if user_input is not None:
-            device_id = str(user_input[CONF_DEVICE_ID]).strip()
-            name = str(user_input.get(CONF_NAME) or device_id).strip()
+            device_id = str(user_input.get(CONF_DEVICE_ID) or "").strip()
+            name = str(user_input.get(CONF_NAME) or "").strip()
             if not device_id:
-                errors["base"] = "empty_device"
-            elif device_id == RESERVED_DEVICE_ID:
+                device_id = _random_device_id()
+            if device_id.lower() == RESERVED_DEVICE_ID:
                 errors["base"] = "reserved_device"
             else:
                 await self.async_set_unique_id(device_id)
                 self._abort_if_unique_id_configured()
-                return self._create(device_id, name)
+                return self._create(device_id, name or device_id)
 
         return self.async_show_form(
             step_id="manual",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_DEVICE_ID): str,
+                    vol.Optional(CONF_DEVICE_ID): str,
                     vol.Optional(CONF_NAME): str,
                 }
             ),
