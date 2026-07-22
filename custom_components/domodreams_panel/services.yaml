@@ -5,25 +5,19 @@ push_config:
     against the schema and publish it (config/panels + config/device) retained so
     the panel re-renders.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
 
 wake:
   name: Wake
   description: Wake the panel from its screensaver at full brightness.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
 
 set_screen:
   name: Set screen
   description: Turn the panel screen on, off (screensaver), or dim it.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
   fields:
     action:
       name: Action
@@ -47,9 +41,7 @@ page:
   name: Go to page
   description: Navigate the panel to a page by index or id.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
   fields:
     index:
       name: Page index
@@ -68,25 +60,19 @@ ping:
     Ping the panel; the round-trip time is emitted on the
     domodreams_panel_pong bus event and logged.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
 
 screenshot:
   name: Screenshot
   description: Request a fresh screenshot; the panel's camera entity updates on reply.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
 
 set_alarm:
   name: Set alarm
   description: Set (or clear) the panel's built-in alarm clock.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
   fields:
     enabled:
       name: Enabled
@@ -114,9 +100,7 @@ play_media:
   name: Play media
   description: Play a sound/media clip on the panel.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
   fields:
     url:
       name: URL
@@ -138,9 +122,7 @@ stop_media:
   name: Stop media
   description: Stop any media playback (or the ringing alarm) on the panel.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
 
 notify:
   name: Notify
@@ -150,9 +132,7 @@ notify:
     pressed (or that it was dismissed / expired) is reported on the
     domodreams_panel_notification bus event.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
   fields:
     title:
       name: Title
@@ -255,9 +235,7 @@ notify_clear:
   name: Clear notification
   description: Remove a notification from the panel — one by id, or all of them.
   target:
-    device:
-      filter:
-        - integration: domodreams_panel
+    device: {}
   fields:
     id:
       name: Id
