@@ -1,0 +1,18 @@
+{
+  "v": 1,
+  "theme": "cream",
+  "pages": [
+    {
+      "id": "home",
+      "title": "Home",
+      "type": "grid",
+      "grid": { "columns": 4, "rows": 4 },
+      "tiles": []
+    },
+    {
+      "id": "clock",
+      "title": "Clock",
+      "type": "clock"
+    }
+  ]
+}

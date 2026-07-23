@@ -1,0 +1,117 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Add a DomoDreams panel",
+        "description": "Pick a discovered panel, or set up a new one.\n\nPanels reach Home Assistant through its MQTT broker at **{broker}** — point the app's *MQTT address* setting there (its WebSocket listener, not 1883).",
+        "data": {
+          "device_id": "Panel"
+        }
+      },
+      "manual": {
+        "title": "Set up a new panel",
+        "description": "Choose an id for this panel — you'll set the **same value** as the panel's **instanceName** in the app (its Settings screen). Leave it blank to generate one.\n\nAlready have the panel running and connected to MQTT? Cancel and add it from the **Discovered** card instead — no id needed.\n\nThe app must point at Home Assistant's MQTT broker, **{broker}** (its WebSocket listener, not 1883).",
+        "data": {
+          "device_id": "Device ID (optional)",
+          "name": "Friendly name (optional)"
+        },
+        "data_description": {
+          "device_id": "The panel's instanceName. Pick something short like living-room and set the same value in the app. Blank = auto-generated.",
+          "name": "Shown in Home Assistant. Defaults to the device ID."
+        }
+      },
+      "confirm": {
+        "title": "Add DomoDreams panel",
+        "description": "Add the discovered panel \"{device_id}\"?"
+      }
+    },
+    "error": {
+      "empty_device": "Device ID cannot be empty.",
+      "reserved_device": "\"discover\" is reserved and cannot be used as a device ID."
+    },
+    "abort": {
+      "already_configured": "This panel is already configured.",
+      "invalid_device": "Not a valid panel device.",
+      "mqtt_required": "This integration talks to panels over MQTT. Set up Home Assistant's MQTT integration first, then add the panel."
+    }
+  },
+  "services": {
+    "push_config": {
+      "name": "Push config",
+      "description": "Validate and publish the panel's config so it re-renders."
+    },
+    "wake": { "name": "Wake", "description": "Wake the panel from its screensaver." },
+    "set_screen": {
+      "name": "Set screen",
+      "description": "Turn the panel screen on, off, or dim it.",
+      "fields": {
+        "action": { "name": "Action", "description": "on, off, or dim." },
+        "brightness": { "name": "Brightness", "description": "0..1, used with dim." }
+      }
+    },
+    "page": {
+      "name": "Go to page",
+      "description": "Navigate the panel to a page.",
+      "fields": {
+        "index": { "name": "Page index", "description": "Zero-based page index." },
+        "id": { "name": "Page id", "description": "Page id from the config." }
+      }
+    },
+    "ping": { "name": "Ping", "description": "Ping the panel and report RTT." },
+    "refresh_info": { "name": "Refresh diagnostics", "description": "Republish the panel's uptime, Wi-Fi signal, IP and free memory now." },
+    "screenshot": { "name": "Screenshot", "description": "Request a fresh screenshot." },
+    "set_alarm": {
+      "name": "Set alarm",
+      "description": "Set the panel's alarm clock.",
+      "fields": {
+        "enabled": { "name": "Enabled", "description": "Enable the alarm." },
+        "hour": { "name": "Hour", "description": "0-23." },
+        "minute": { "name": "Minute", "description": "0-59." }
+      }
+    },
+    "play_media": {
+      "name": "Play media",
+      "description": "Play a clip on the panel.",
+      "fields": {
+        "url": { "name": "URL", "description": "Media URL." },
+        "asset": { "name": "Bundled asset", "description": "Bundled asset name." },
+        "volume": { "name": "Volume", "description": "0..1." }
+      }
+    },
+    "stop_media": { "name": "Stop media", "description": "Stop media/alarm playback." },
+    "notify": {
+      "name": "Notify",
+      "description": "Show a notification on the panel: icon or image, title, message, severity, a sound or spoken text, and up to three answer buttons.",
+      "fields": {
+        "title": { "name": "Title", "description": "Notification title." },
+        "message": { "name": "Message", "description": "Notification text." },
+        "level": { "name": "Level", "description": "info, success, warning or error — drives the colour." },
+        "priority": { "name": "Priority", "description": "normal shows a banner without waking the panel; high takes the screen and wakes it." },
+        "icon": { "name": "Icon", "description": "Panel icon name." },
+        "image": { "name": "Image URL", "description": "Shown instead of the icon." },
+        "sound": { "name": "Sound", "description": "Bundled panel sound (ding, alarm_beep, alarm, alarmo, siren), URL, or a file from Home Assistant's media." },
+        "speak": { "name": "Speak", "description": "Text to say out loud on the panel." },
+        "tts_engine": { "name": "Text-to-speech engine", "description": "Defaults to Home Assistant's default engine." },
+        "language": { "name": "Language", "description": "Language for the spoken text." },
+        "actions": { "name": "Buttons", "description": "Up to three answer buttons." },
+        "timeout": { "name": "Timeout", "description": "Seconds on screen; 0 waits for an answer. Default 60." },
+        "id": { "name": "Id", "description": "Re-sending the same id replaces that notification." }
+      }
+    },
+    "notify_clear": {
+      "name": "Clear notification",
+      "description": "Remove a notification from the panel: one by id, or all of them.",
+      "fields": {
+        "id": { "name": "Id", "description": "Leave empty to clear every notification." }
+      }
+    },
+    "discover": {
+      "name": "Discover panels",
+      "description": "Broadcast a discovery probe and return the panels that reply.",
+      "fields": {
+        "timeout": { "name": "Timeout", "description": "Seconds to wait for replies." }
+      }
+    }
+  }
+}
