@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Features — DomoDreams NSPanel Pro</title>
+<meta name="description" content="Typed pages, tactile tiles, a live camera, an Alarmo keypad, an on-screen siren and notifications, presence and light sensors, 32 curated styles — all configured from Home Assistant.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f93b4'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="logo-mark">◆</span>
+      <span class="logo-text">DomoDreams <b>NSPanel Pro</b><small class="payoff">made with ♥ by domodreams.it</small></span></a>
+    <nav class="site-nav">
+      <a href="features.html" aria-current="page">Features</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="setup.html">Setup</a>
+      <a href="licensing.html">Licensing</a>
+      <button id="themeBtn" type="button" aria-label="Toggle color theme">☾ Dark</button>
+      <a class="btn btn-primary btn-sm" href="licensing.html#buy">Unlock Pro</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <p class="brand">Features</p>
+    <h1>Everything the panel can be.</h1>
+    <p class="lede">Six typed page types, a shelf of tactile tiles, a live camera, an alarm
+      keypad with an on-screen siren, notifications, presence and light sensors, and 32
+      curated styles — all configured visually and driven over MQTT. Tap any screenshot to
+      enlarge it.</p>
+  </section>
+
+  <!-- PAGE TYPES -->
+  <section class="wrap section-tight">
+    <div class="sec-head"><h2>Typed pages</h2>
+      <span class="tone">swipe to switch · tap to zoom</span></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <p class="klabel">grid</p>
+        <h3>The control grid</h3>
+        <p>Buttons, split tiles and a scene bar. Lights, switches, scenes, scripts — one tap
+          each, lit from real state.</p>
+        <div class="pt-shot"><img class="zoom" src="assets/img/grid.png" alt="Grid page on the panel" width="480" height="480" loading="lazy"></div>
+      </div>
+      <div class="card">
+        <p class="klabel">clock</p>
+        <h3>Clock &amp; screensaver</h3>
+        <p>Analog or digital, fully themeable. Doubles as the dimmed screensaver — the screen
+          you see most of the day.</p>
+        <div class="pt-shot"><img class="zoom" src="assets/img/clock.png" alt="Clock page on the panel" width="480" height="480" loading="lazy"></div>
+      </div>
+      <div class="card">
+        <p class="klabel">weather</p>
+        <h3>Weather <span class="chip" style="vertical-align:middle">soon</span></h3>
+        <p>An at-a-glance weather page driven by your Home Assistant weather entity — themed to
+          match the rest of the wall.</p>
+        <div class="ph soon"><span class="ph-ico">⛅</span><span class="ph-t">Coming soon</span>
+          <span class="ph-s">In active development</span></div>
+      </div>
+      <div class="card">
+        <p class="klabel">alarm</p>
+        <h3>Alarm keypad</h3>
+        <p>A full <b>Alarmo</b> keypad — arm away, arm home, disarm, live status. The security
+          surface, right by the door.</p>
+        <div class="pt-shot"><img class="zoom" src="assets/img/alarm.png" alt="Alarm keypad on the panel" width="480" height="480" loading="lazy"></div>
+      </div>
+      <div class="card">
+        <p class="klabel">camera</p>
+        <h3>Live camera</h3>
+        <p>Streams live MJPEG in-panel with PTZ, and detects a dead stream by hashing pixels —
+          a frozen feed never masquerades as live.</p>
+        <div class="pt-shot"><img class="zoom" src="assets/img/camera.png" alt="Camera page on the panel" width="480" height="480" loading="lazy"></div>
+      </div>
+      <div class="card">
+        <p class="klabel">music</p>
+        <h3>Music</h3>
+        <p>A media surface with transport and volume, wired to Home Assistant media players and
+          Music Assistant.</p>
+        <div class="pt-shot"><img class="zoom" src="assets/img/music.png" alt="Music page on the panel" width="480" height="480" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TILES -->
+  <section class="wrap section">
+    <div class="hero-grid" style="align-items:center">
+      <div>
+        <p class="brand">The grid, up close</p>
+        <h2>A shelf of tactile tiles</h2>
+        <p class="lede">Every tile is a pre-rendered surface, not a stack of shadows — so it
+          stays crisp and cheap to draw on the panel's modest GPU.</p>
+        <dl class="deflist pad-top">
+          <div class="row"><dt>button</dt><dd><b>Toggle &amp; momentary.</b> <span>Lights, switches, scenes, scripts.</span></dd></div>
+          <div class="row"><dt>dimmer</dt><dd><b>Step up / down.</b> <span>Tap the upper or lower half; long-press auto-repeats.</span></dd></div>
+          <div class="row"><dt>switcher</dt><dd><b>Multi-state.</b> <span>Cycle through fixed options with a tap.</span></dd></div>
+          <div class="row"><dt>split</dt><dd><b>Two actions, one tile.</b> <span>Independent halves for tight layouts.</span></dd></div>
+          <div class="row"><dt>rocker</dt><dd><b>Cover &amp; blind control.</b> <span>Up / stop / down, physical-feeling.</span></dd></div>
+          <div class="row"><dt>scene bar</dt><dd><b>One-tap scenes.</b> <span>A row of shortcuts pinned across the grid.</span></dd></div>
+        </dl>
+      </div>
+      <figure class="device"><figcaption>Covers &amp; dimmers</figcaption>
+        <img class="zoom" src="assets/img/covers.png" alt="Cover and dimmer tiles" width="480" height="480"></figure>
+    </div>
+    <div class="callout pad-top">
+      <p><strong>No drag, on purpose.</strong> Continuous drag feels bad on this touchscreen, so
+        dimmers and covers step via taps with long-press auto-repeat — a deliberate decision made
+        on the real hardware.</p>
+    </div>
+  </section>
+
+  <!-- SECURITY & ALERTS -->
+  <section class="wrap section">
+    <div class="sec-head"><h2>Security &amp; alerts</h2><span class="tone">it protects the room, too</span></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <div class="ico">🔐</div>
+        <p class="klabel">alarm</p>
+        <h3>Alarmo keypad</h3>
+        <p>Arm away, arm home, disarm and read live state — the full keypad by the door, themed
+          like everything else. No separate app, no web view of a dashboard.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🚨</div>
+        <p class="klabel">siren</p>
+        <h3>On-screen siren</h3>
+        <p>When the alarm trips, the whole panel becomes a siren — a full-screen police-flash and
+          a loud looping tone. It's the top audio priority: never ducked, never talked over, and
+          Home Assistant can't accidentally silence it — only a deliberate stop-everything does.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🔔</div>
+        <p class="klabel">notifications</p>
+        <h3>Notifications</h3>
+        <p>Push a message to the glass — a <b>banner</b>, or <b>full-screen</b> for the urgent
+          ones, which wake a sleeping panel. Normal ones wait quietly and show at the next wake,
+          so nothing burns its timeout in an empty room. Optional sound, or spoken aloud as a TTS
+          announcement.</p>
+      </div>
+    </div>
+    <div class="callout pad-top">
+      <p><strong>Wired into Home Assistant.</strong> A <code class="inline">notify.&lt;panel&gt;</code>
+        entity and services push messages, speech and sounds; bus events
+        (<code class="inline">shown · dismissed · expired</code>) let your automations react to
+        what actually reached the person in the room.</p>
+    </div>
+  </section>
+
+  <!-- CAMERA -->
+  <section class="wrap section">
+    <div class="hero-grid" style="align-items:center">
+      <div>
+        <p class="brand">Eyes on the door</p>
+        <h2>Live camera that tells the truth</h2>
+        <p class="lede">MJPEG plays inside the panel with pan / tilt / zoom. When a stream dies,
+          Chromium keeps showing the last frame forever — so the panel hashes pixels to actually
+          know the feed is alive. A dead camera can't fake it.</p>
+        <div class="chips pad-top">
+          <span class="chip">Live MJPEG</span>
+          <span class="chip">PTZ controls</span>
+          <span class="chip accent">Liveness by pixel-hash</span>
+        </div>
+      </div>
+      <figure class="device"><figcaption>Camera</figcaption>
+        <img class="zoom" src="assets/img/camera.png" alt="Live camera page on the panel" width="480" height="480" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <!-- SENSORS -->
+  <section class="wrap section">
+    <div class="sec-head"><h2>It senses the room</h2><span class="tone">onboard sensors</span></div>
+    <div class="grid cols-2">
+      <div class="card">
+        <div class="ico">🚶</div>
+        <p class="klabel">presence sensor</p>
+        <h3>Wakes as you approach</h3>
+        <p>An active proximity sensor lets the panel light up <em>before</em> you touch it, and
+          settle back to its dimmed screensaver once you walk away — so it's bright when you're
+          there and dark when you're not. Surfaced to Home Assistant as well.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🔆</div>
+        <p class="klabel">light sensor</p>
+        <h3>Reads the room's light</h3>
+        <p>An ambient light sensor drives auto-brightness — never glaring at 3 a.m., never washed
+          out at noon — and is published to Home Assistant as an <b>illuminance</b> sensor you can
+          automate on.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYSTEM -->
+  <section class="wrap section">
+    <div class="sec-head"><h2>The system underneath</h2></div>
+    <div class="grid cols-3">
+      <div class="card">
+        <div class="ico">🎨</div>
+        <h3>32 curated styles</h3>
+        <p>Light and dark, matte and metallic, wood and neon. Change the whole feel of the wall
+          from a menu. <a href="gallery.html">Browse them →</a></p>
+      </div>
+      <div class="card">
+        <div class="ico">🌙</div>
+        <h3>Owns its own dimming</h3>
+        <p>Two-stage inactivity → default page → dimmed clock screensaver. Wakes on touch or the
+          presence sensor. Nothing burns in.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🎵</div>
+        <h3>Music &amp; audio</h3>
+        <p>Media players and Music Assistant, with TTS announcements that pause the music, speak,
+          then resume exactly what was playing.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🏠</div>
+        <h3>Multi-panel</h3>
+        <p>One HA drives many panels. Each is its own device, config document and topic namespace —
+          services are device-targeted throughout.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🧩</div>
+        <h3>Visual editor</h3>
+        <p>A WYSIWYG config panel in the HA sidebar, admin-only. Remote-control and live
+          screenshots of the panel, right from the browser.</p>
+      </div>
+      <div class="card">
+        <div class="ico">📴</div>
+        <h3>Offline-first</h3>
+        <p>Boots and renders from retained topics + local cache. Broker or HA down ⇒ last-known
+          UI, visual feedback only, nothing lost.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KIOSK -->
+  <section class="wrap section">
+    <div class="hero-grid" style="align-items:center">
+      <div>
+        <p class="brand">Built for the wall</p>
+        <h2>A proper kiosk, not a launcher hack</h2>
+        <p class="lede">Purpose-built for the NSPanel Pro hardware and nothing else.</p>
+        <div class="chips pad-top">
+          <span class="chip">Immersive fullscreen</span>
+          <span class="chip">Keep-screen-on</span>
+          <span class="chip">Portrait lock</span>
+          <span class="chip">Autostart on boot</span>
+          <span class="chip">480×480 · mdpi</span>
+          <span class="chip">Android 8.1 / API 27</span>
+        </div>
+      </div>
+      <figure class="device"><figcaption>On-device settings</figcaption>
+        <img class="zoom" src="assets/img/settings.png" alt="On-device settings screen" width="480" height="480"></figure>
+    </div>
+  </section>
+
+  <section class="wrap section center">
+    <h2>Ready to see it dressed up?</h2>
+    <p class="lede center">Thirty-two styles on the same two grids — then pick a licence.</p>
+    <div class="btn-row center">
+      <a class="btn btn-primary" href="gallery.html">Open the gallery</a>
+      <a class="btn" href="licensing.html#buy">See pricing →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="logo" href="index.html"><span class="logo-mark">◆</span>
+        <span class="logo-text">DomoDreams <b>NSPanel Pro</b><small class="payoff">made with ♥ by domodreams.it</small></span></a>
+      <div class="foot-links">
+        <div class="foot-col"><b>Product</b>
+          <a href="features.html">Features</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="licensing.html">Licensing</a>
+        </div>
+        <div class="foot-col"><b>Get started</b>
+          <a href="setup.html">Setup guide</a>
+          <a href="licensing.html#buy">Buy a licence</a>
+        </div>
+        <div class="foot-col"><b>Requires</b>
+          <a href="https://sonoff.tech/product/central-control-panel/nspanel-pro/" target="_blank" rel="noopener">Sonoff NSPanel Pro</a>
+          <a href="https://www.home-assistant.io/" target="_blank" rel="noopener">Home Assistant</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© DomoDreams · made with ♥ by <a href="https://domodreams.it" target="_blank" rel="noopener">domodreams.it</a></span>
+      <span>Not affiliated with Sonoff/ITEAD or Home Assistant.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

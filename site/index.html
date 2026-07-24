@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DomoDreams NSPanel Pro — a control panel you'd want on your wall</title>
+<meta name="description" content="Turn a Sonoff NSPanel Pro into a gorgeous, fully-custom Home Assistant control panel. Curated styles, 32 of them, driven over MQTT, configured from a visual editor in the HA sidebar.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f93b4'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="logo-mark">◆</span>
+      <span class="logo-text">DomoDreams <b>NSPanel Pro</b><small class="payoff">made with ♥ by domodreams.it</small></span></a>
+    <nav class="site-nav">
+      <a href="features.html">Features</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="setup.html">Setup</a>
+      <a href="licensing.html">Licensing</a>
+      <button id="themeBtn" type="button" aria-label="Toggle color theme">☾ Dark</button>
+      <a class="btn btn-primary btn-sm" href="licensing.html#buy">Unlock Pro</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <p class="brand">DomoDreams · NSPanel Pro</p>
+        <h1>A control panel you'd actually want on your wall.</h1>
+        <p class="lede">Turn a Sonoff NSPanel Pro into a fully-custom Home Assistant
+          panel — soft, crafted surfaces, 32 curated styles, and every button laid out
+          visually from the HA sidebar. All local, all over MQTT, no cloud.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="features.html">Explore the features</a>
+          <a class="btn" href="gallery.html">See 32 styles →</a>
+        </div>
+        <div class="chips pad-top">
+          <span class="chip accent">Home Assistant</span>
+          <span class="chip">MQTT · local push</span>
+          <span class="chip">480×480 · Android 8.1</span>
+          <span class="chip">Multi-panel</span>
+        </div>
+      </div>
+      <div class="hero-shots">
+        <figure class="device"><figcaption>Grid</figcaption>
+          <img src="assets/img/grid.png" alt="Control grid on the panel" loading="eager" width="480" height="480"></figure>
+        <figure class="device"><figcaption>Clock</figcaption>
+          <img src="assets/img/clock.png" alt="Themeable clock face" width="480" height="480"></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT IT IS -->
+  <section class="wrap section">
+    <div class="sec-head">
+      <p class="eyebrow" style="margin:0">What it is</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="card">
+        <div class="ico">🎛️</div>
+        <p class="klabel">Premium by default</p>
+        <h3>A crafted UI, not a dashboard</h3>
+        <p>Soft, pre-rendered surfaces tuned for the panel's low-power GPU. It reads
+          as a designed object, not a browser tab pinned to the wall.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🧩</div>
+        <p class="klabel">One document</p>
+        <h3>Look and behavior together</h3>
+        <p>A single config describes what each tile <em>looks like</em> and what it
+          <em>does</em>. The panel renders it; the integration executes it.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🛰️</div>
+        <p class="klabel">Local push</p>
+        <h3>Everything over MQTT</h3>
+        <p>Buttons publish events, Home Assistant mirrors real entity state back, and
+          the panel lights up to match. Optimistic on tap, reconciled from state.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🖥️</div>
+        <p class="klabel">No JSON by hand</p>
+        <h3>Edit it visually</h3>
+        <p>A WYSIWYG editor lives right in the HA sidebar. Build layouts by clicking —
+          pick entities, arrange tiles, choose page types, set the theme.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🏠</div>
+        <p class="klabel">By design</p>
+        <h3>Multi-panel</h3>
+        <p>One Home Assistant drives <em>N</em> panels, each scoped to its own device,
+          entities and topic namespace. Nothing assumes a single panel.</p>
+      </div>
+      <div class="card">
+        <div class="ico">🔌</div>
+        <p class="klabel">Resilient</p>
+        <h3>Boots offline</h3>
+        <p>The panel renders from retained topics and a local cache. Broker or HA
+          down? It still shows your last-known UI. Your walls don't phone home.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE TYPES -->
+  <section class="wrap section">
+    <div class="sec-head">
+      <h2>Typed pages, swipe between them</h2>
+      <span class="tone">grid · clock · weather · alarm · camera · music</span>
+    </div>
+    <p class="lede" style="margin-bottom:26px">Mix and match per panel. Every page type
+      is a first-class citizen with its own layout and behavior.</p>
+    <div class="grid cols-3">
+      <figure class="device"><figcaption>Grid</figcaption>
+        <img src="assets/img/grid.png" alt="Button grid" width="480" height="480"></figure>
+      <figure class="device"><figcaption>Covers &amp; dimmers</figcaption>
+        <img src="assets/img/covers.png" alt="Cover and dimmer controls" width="480" height="480"></figure>
+      <figure class="device"><figcaption>Alarm keypad</figcaption>
+        <img src="assets/img/alarm.png" alt="Alarmo keypad" width="480" height="480"></figure>
+    </div>
+    <div class="btn-row">
+      <a class="btn" href="features.html">All features →</a>
+      <a class="btn btn-ghost" href="gallery.html">Browse the gallery →</a>
+    </div>
+  </section>
+
+  <!-- THEMES TEASER -->
+  <section class="wrap section">
+    <div class="card" style="display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; padding:30px">
+      <div>
+        <p class="brand" style="margin-bottom:10px">Thirty-two styles, one panel</p>
+        <h2 style="margin-bottom:8px">From soft matte to wood &amp; brass</h2>
+        <p class="lede">Every curated style rendered on the same two grids — light
+          and dark, minimal and maximal. Pick one from a dropdown and change the whole
+          feel of the wall.</p>
+      </div>
+      <a class="btn btn-primary" href="gallery.html">Open the gallery</a>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap section">
+    <div class="sec-head"><h2>How it works</h2></div>
+    <div class="hero-grid" style="align-items:start">
+      <div class="stack">
+        <p class="lede">The integration owns the Home Assistant side end-to-end. The
+          app never touches HA discovery topics — it just renders and reports.</p>
+        <dl class="deflist">
+          <div class="row"><dt>event</dt><dd><b>Panel → HA.</b> <span>A button was pressed; HA runs the bound service call.</span></dd></div>
+          <div class="row"><dt>config</dt><dd><b>HA → Panel.</b> <span>Layout + bindings, retained, so the panel boots from the broker.</span></dd></div>
+          <div class="row"><dt>state</dt><dd><b>HA → Panel.</b> <span>Entity state mirror, retained. Tiles reconcile to reality.</span></dd></div>
+          <div class="row"><dt>cmd</dt><dd><b>HA → Panel.</b> <span>Wake, change page, reload — device-targeted.</span></dd></div>
+        </dl>
+      </div>
+      <pre class="code"><span class="c"># domodreams/panel/{device}/…</span>
+NSPanel Pro <span class="k">──MQTT──▶</span>  event      <span class="c">(button pressed)</span>
+            <span class="k">◀─MQTT───</span>  config     <span class="c">(layout + bindings, retained)</span>
+            <span class="k">◀─MQTT───</span>  state/*    <span class="c">(entity state mirror, retained)</span>
+            <span class="k">◀─MQTT───</span>  cmd/*      <span class="c">(wake, page, reload, …)</span>
+
+<span class="c"># Reconnect: exponential backoff with jitter (1s → 30s).</span>
+<span class="c"># Boots from retained topics + local cache when HA is down.</span></pre>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="wrap section">
+    <div class="plan featured center" style="max-width:none">
+      <p class="brand center" style="margin-bottom:10px">Free to use · Pro to polish</p>
+      <h2 style="margin-bottom:8px">Free, and open where it counts</h2>
+      <p class="lede center">The Home Assistant integration is MIT-licensed and open. The
+        panel app is free to run — a Pro licence just removes the on-screen watermark,
+        per page type or all at once.</p>
+      <div class="btn-row center">
+        <a class="btn btn-primary" href="licensing.html#buy">See pricing</a>
+        <a class="btn" href="setup.html">Install it →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="logo" href="index.html"><span class="logo-mark">◆</span>
+        <span class="logo-text">DomoDreams <b>NSPanel Pro</b><small class="payoff">made with ♥ by domodreams.it</small></span></a>
+      <div class="foot-links">
+        <div class="foot-col"><b>Product</b>
+          <a href="features.html">Features</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="licensing.html">Licensing</a>
+        </div>
+        <div class="foot-col"><b>Get started</b>
+          <a href="setup.html">Setup guide</a>
+          <a href="licensing.html#buy">Buy a licence</a>
+        </div>
+        <div class="foot-col"><b>Requires</b>
+          <a href="https://sonoff.tech/product/central-control-panel/nspanel-pro/" target="_blank" rel="noopener">Sonoff NSPanel Pro</a>
+          <a href="https://www.home-assistant.io/" target="_blank" rel="noopener">Home Assistant</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© DomoDreams · made with ♥ by <a href="https://domodreams.it" target="_blank" rel="noopener">domodreams.it</a></span>
+      <span>Not affiliated with Sonoff/ITEAD or Home Assistant.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
