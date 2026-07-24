@@ -315,7 +315,13 @@ on a static surface — the on/off state would be invisible.
 1. The single Theme JSON object, in a ```json block, ready to paste into the studio's
    **Edit → JSON** tab (it validates and previews live). If I asked you to *update* an
    existing theme, keep its `name` and change the tokens.
-2. A short GitHub feature-request body I can submit, containing: a one-paragraph
+2. A **live preview I can see right here in Claude Design**: reproduce the studio HTML
+   you opened at the URL above as a runnable HTML artifact, but with your new theme
+   injected into its `<script id="seed">` themes array and selected by default (you may
+   drop the other bundled themes from that seed to keep the artifact light — keep
+   `baseCss` + your theme). This renders the real panel previews (palette, 480×480 grid,
+   clocks, alarm, music) in your theme so I can see it without leaving Claude Design.
+3. A short GitHub feature-request body I can submit, containing: a one-paragraph
    description of the look, the JSON in a fenced block, and this checklist —
    - [ ] State is visible (the glyph relights, or the surface lights, on ON)
    - [ ] Previewed in themes-viewer.html
