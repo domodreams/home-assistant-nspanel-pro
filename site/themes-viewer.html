@@ -305,6 +305,11 @@ gradients look like `linear-gradient(145deg,#a,#b)`. What each token does is in 
 attached brief and THEME-SPEC.md §3. Every `surfaceCss` selector must reference the
 theme's OWN `name`.
 
+**Fonts are fixed — a theme cannot change them.** A theme controls **colour,
+surface, depth/radius, LED and glow only**; it cannot change the typeface, font
+weight, or text sizes. The panel draws every label, numeral and glyph with its own
+built-in typography, so don't propose, require, or rely on any font change.
+
 ### The golden rule (non-negotiable)
 State must be visible. A theme with `flat: false` keeps `surfaceCss` empty and relights
 the glyph (`--muted` → `--accent`) on ON. A theme with `flat: true` lights the surface
