@@ -320,12 +320,12 @@ on a static surface — the on/off state would be invisible.
 1. The single Theme JSON object, in a ```json block, ready to paste into the studio's
    **Edit → JSON** tab (it validates and previews live). If I asked you to *update* an
    existing theme, keep its `name` and change the tokens.
-2. A **live preview I can see right here in Claude Design**: reproduce the studio HTML
-   you opened at the URL above as a runnable HTML artifact, but with your new theme
-   injected into its `<script id="seed">` themes array and selected by default (you may
-   drop the other bundled themes from that seed to keep the artifact light — keep
-   `baseCss` + your theme). This renders the real panel previews (palette, 480×480 grid,
-   clocks, alarm, music) in your theme so I can see it without leaving Claude Design.
+2. **Give me the JSON only — do NOT rebuild, recreate, or restyle the studio.** You can't
+   reproduce its exact HTML/JS, and a lookalike is worse than the real page. I preview by
+   loading your JSON into the REAL studio (the URL above): I copy your JSON and hit its
+   **📋 Paste theme** button, or paste into **Edit → JSON**, or **⇧ Import** the
+   `.theme.json` file — any of which renders the true panel previews (palette, 480×480
+   grid, clocks, alarm, music) in your theme, at any size. So don't build an HTML preview.
 3. A short GitHub feature-request body I can submit, containing: a one-paragraph
    description of the look, the JSON in a fenced block, and this checklist —
    - [ ] State is visible (the glyph relights, or the surface lights, on ON)
@@ -350,6 +350,7 @@ over starting from nothing, and keep text legible on the chosen `--face`.
     <button type="button" id="dupBtn" title="Duplicate the selected theme">⧉ Duplicate</button>
     <button type="button" id="delBtn" title="Delete the selected theme from your local set">🗑 Delete</button>
     <button type="button" id="importBtn" title="Import .theme.json file(s) or a themes.zip">⇧ Import</button>
+    <button type="button" id="pasteBtn" title="Paste a theme JSON from your clipboard (e.g. from Claude Design) and preview it">📋 Paste theme</button>
     <button type="button" id="expBtn" title="Download this theme as &lt;name&gt;.theme.json">⇩ Export</button>
     <button type="button" id="expAllBtn" title="Download all themes as themes.zip (themes/ folder layout)">⇩ All .zip</button>
     <button type="button" id="ghBtn" title="Open a prefilled GitHub feature request for this theme">⇱ GitHub request</button>
@@ -2066,6 +2067,20 @@ function importJsonText(text) {
   }
   return n;
 }
+// Paste a theme JSON straight from the clipboard (e.g. copied from Claude Design) and
+// preview it — no encoding, no file, any size. Accepts one theme or a {themes:[]} bundle.
+async function pasteTheme() {
+  let text;
+  try { text = await navigator.clipboard.readText(); }
+  catch (e) { toast('Clipboard blocked — use ⇧ Import or ✎ Edit → JSON instead'); return; }
+  let o; try { o = JSON.parse(text); } catch (e) { toast('Clipboard is not valid theme JSON'); return; }
+  const t = o && Array.isArray(o.themes) ? o.themes[0] : o;
+  const { errs } = validateTheme(t);
+  if (errs.length) { toast('Not a valid theme: ' + errs[0]); return; }
+  upsertTheme(t);
+  buildStyle(DATA); current = t; refreshSelect(t.name); render(current); persist();
+  toast('Pasted "' + t.name + '" — previewing (Export or GitHub-request to keep it)');
+}
 async function importFiles(fileList) {
   let added = 0;
   for (const file of Array.from(fileList || [])) {
@@ -2210,6 +2225,7 @@ $('expAllBtn').addEventListener('click', exportAllZip);
 $('ghBtn').addEventListener('click', () => githubRequest(editedObj || current));
 $('promptBtn').addEventListener('click', copyPrompt);
 $('importBtn').addEventListener('click', () => $('importInput').click());
+$('pasteBtn').addEventListener('click', pasteTheme);
 $('importInput').addEventListener('change', (e) => { importFiles(e.target.files); e.target.value = ''; });
 $('ed-close').addEventListener('click', closeEditor);
 $('ed-github').addEventListener('click', () => githubRequest(editedObj || current));
