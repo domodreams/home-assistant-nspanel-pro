@@ -268,6 +268,8 @@ select:focus{ outline:2px solid var(--accent); outline-offset:2px; }
 .shot{ border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-sm);
   background:var(--card); }
 .shot img{ display:block; width:100%; height:auto; }
+.hacs-btn{ margin:0 0 14px; }
+.hacs-btn img{ height:38px; width:auto; display:block; }
 .shot.device{ background:var(--screen); border-color:var(--screen); display:flex; justify-content:center;
   padding:26px; }
 .shot.device img{ width:min(360px,80%); border-radius:14px;
@@ -288,6 +290,17 @@ img.zoom{ cursor:zoom-in; }
 .pt-shot{ margin-top:14px; border-radius:12px; overflow:hidden; background:var(--screen);
   border:1px solid var(--line); box-shadow:var(--shadow-sm); }
 .pt-shot img{ display:block; width:100%; aspect-ratio:1/1; object-fit:cover; }
+.pt-theme{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--soft); margin:9px 0 0; }
+.pt-theme b{ color:var(--accent); font-weight:600; }
+
+/* ---- admin-GUI (desktop) screenshot frame ---- */
+.gui-shot{ border-radius:14px; overflow:hidden; border:1px solid var(--line); background:var(--card);
+  box-shadow:var(--shadow); margin:0; }
+.gui-shot img{ display:block; width:100%; height:auto; }
+.gui-cap{ font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--soft);
+  margin:10px 2px 0; }
+.gui-cap b{ color:var(--accent); font-weight:600; }
 .ph{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
   gap:8px; aspect-ratio:1/1; border:1.5px dashed var(--line); border-radius:12px; background:var(--chip);
   color:var(--soft); padding:16px; margin-top:14px; }

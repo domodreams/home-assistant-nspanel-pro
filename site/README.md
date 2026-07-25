@@ -10,7 +10,7 @@ generated file (see below).
 |---|---|
 | `index.html` | Homepage — general info, what it is, how it works |
 | `features.html` | Full feature tour (page types, tiles, camera, alarm, themes, kiosk) |
-| `gallery.html` | Theme gallery — all 32 themes on two grids, switchable dropdown |
+| `gallery.html` | Style gallery — all 32 styles across a sample six-page layout, switchable dropdown (generated) |
 | `setup.html` | Install guide — HACS → add panel → push app → configure |
 | `licensing.html` | Pricing + licensing, wired for Stripe checkout |
 | `assets/style.css` | Shared design system (light/dark aware) |
@@ -52,8 +52,35 @@ The checkout is wired for **Stripe Payment Links** and ships with placeholders:
 
 ## Regenerating the gallery
 
-`gallery.html` embeds all 32 themes as inline WebP data URIs (~1.15 MB), rendered
-from the same specimen as the app. It was generated from the reference artifact's
-data; the generator script lives in the scratchpad. To rebuild after new theme
-renders, re-run the generator against fresh `{theme: {salone, casa, label, tone}}`
-data. It is a plain static file — no runtime dependency on the generator.
+`gallery.html` is generated. It shows all 32 styles across a sample six-page
+layout (living room, home, clock, security, cameras, music) in the reference
+artifact's editorial layout, and swaps every screen at once from the dropdown. The
+screenshots are **external** WebP files under `assets/gallery/<style>--<page>.webp`
+(192 of them), so the HTML itself stays tiny and the `<img>` src is pure
+convention — no image data is inlined.
+
+Both the screenshots and the page come from `tools/showcase-gallery/`:
+
+```bash
+# 1. deploy the app with your style changes to the panel first
+./scripts/deploy-app.ps1
+
+# 2. capture 192 live screenshots from the panel (6 pages × 32 styles)
+bash tools/showcase-gallery/capture.sh          # ~12 min, restores the panel after
+
+# 3. paste a real-looking still into the camera page's black feed area, in every
+#    style (the live MJPEG is too flaky to photograph reliably)
+python tools/showcase-gallery/overlay-camera.py assets/fake-camera.jpg
+
+# 4. convert to WebP + write site/gallery.html
+python tools/showcase-gallery/build-site-gallery.py
+```
+
+The camera page's live feed is faked in post: `capture.sh` grabs the themed
+chrome with the video area black, and `overlay-camera.py` composites a still
+(`tools/showcase-gallery/assets/fake-camera.jpg`) into that rectangle for every
+style — a not-yet-loaded MJPEG looks identical to a working one in a screenshot,
+so photographing the real feed is unreliable.
+
+The default style, page copy and chips live at the top of `build-site-gallery.py`.
+It is a plain static file at runtime — no dependency on the generator once built.

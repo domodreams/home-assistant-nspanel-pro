@@ -28,31 +28,72 @@
 <main>
   <section class="wrap hero">
     <p class="brand">Features</p>
-    <h1>Everything the panel can be.</h1>
+    <h1>What the panel can do.</h1>
     <p class="lede">Six typed page types, a shelf of tactile tiles, a live camera, an alarm
       keypad with an on-screen siren, notifications, presence and light sensors, and 32
-      curated styles — all configured visually and driven over MQTT. Tap any screenshot to
-      enlarge it.</p>
+      curated styles — all configured visually and driven over MQTT.</p>
+  </section>
+
+  <!-- ADMIN GUI -->
+  <section class="wrap section-tight">
+    <div class="sec-head"><h2>Configure it all from Home Assistant</h2>
+      <span class="tone">the admin GUI · no YAML</span></div>
+    <p class="lede" style="margin-bottom:22px">A visual editor lives right in the Home Assistant
+      sidebar. Build pages by clicking, watch a live preview of the panel as you edit, and push
+      changes to the wall over the air — no YAML, no JSON by hand.</p>
+    <figure class="gui-shot"><img class="zoom" src="assets/img/editor-layout.jpg"
+      alt="The DomoDreams visual editor in Home Assistant — pages list, live panel preview and inspector"
+      width="1054" height="800" loading="lazy"></figure>
+    <p class="gui-cap">Layout tab · <b>live preview</b> in the middle, your pages on the left, the panel's settings on the right.</p>
+
+    <div class="grid cols-3" style="margin-top:28px">
+      <div class="card">
+        <p class="klabel">point &amp; click</p>
+        <h3>Tiles, no code</h3>
+        <p>Drop a tile on the grid, then set its entity, icon and label in the inspector — every
+          change lands live in the preview. Drag to move, drag a corner to resize.</p>
+        <figure class="gui-shot" style="margin-top:14px"><img class="zoom" src="assets/img/editor-tile.jpg"
+          alt="Editing a button tile in the visual editor" width="1054" height="800" loading="lazy"></figure>
+      </div>
+      <div class="card">
+        <p class="klabel">page types</p>
+        <h3>Set up any page</h3>
+        <p>Add grid, clock, weather, alarm, camera or music pages, set the swipe order, and
+          configure each one's specifics — like a camera's stream and PTZ pad.</p>
+        <figure class="gui-shot" style="margin-top:14px"><img class="zoom" src="assets/img/editor-camera.jpg"
+          alt="Configuring a camera page in the visual editor" width="1054" height="800" loading="lazy"></figure>
+      </div>
+      <div class="card">
+        <p class="klabel">device</p>
+        <h3>Sensors, screensaver &amp; licence</h3>
+        <p>One Device tab for the screensaver, presence and light sensors, auto-brightness,
+          diagnostics and the licence — sliders and toggles, applied without a restart.</p>
+        <figure class="gui-shot" style="margin-top:14px"><img class="zoom" src="assets/img/editor-device.jpg"
+          alt="The Device tab in the visual editor" width="1054" height="800" loading="lazy"></figure>
+      </div>
+    </div>
   </section>
 
   <!-- PAGE TYPES -->
   <section class="wrap section-tight">
     <div class="sec-head"><h2>Typed pages</h2>
-      <span class="tone">swipe to switch · tap to zoom</span></div>
+      <span class="tone">each shown in a different style</span></div>
     <div class="grid cols-3">
       <div class="card">
         <p class="klabel">grid</p>
         <h3>The control grid</h3>
         <p>Buttons, split tiles and a scene bar. Lights, switches, scenes, scripts — one tap
           each, lit from real state.</p>
-        <div class="pt-shot"><img class="zoom" src="assets/img/grid.png" alt="Grid page on the panel" width="480" height="480" loading="lazy"></div>
+        <div class="pt-shot"><img class="zoom" src="assets/gallery/cyberpunk--controls.webp" alt="Grid page on the panel in the Cyberpunk style" width="480" height="480" loading="lazy"></div>
+        <p class="pt-theme">Style · <b>Cyberpunk</b></p>
       </div>
       <div class="card">
         <p class="klabel">clock</p>
         <h3>Clock &amp; screensaver</h3>
         <p>Analog or digital, fully themeable. Doubles as the dimmed screensaver — the screen
           you see most of the day.</p>
-        <div class="pt-shot"><img class="zoom" src="assets/img/clock.png" alt="Clock page on the panel" width="480" height="480" loading="lazy"></div>
+        <div class="pt-shot"><img class="zoom" src="assets/gallery/wood-carve--clock.webp" alt="Clock page on the panel in the Oak Wood style" width="480" height="480" loading="lazy"></div>
+        <p class="pt-theme">Style · <b>Oak Wood</b></p>
       </div>
       <div class="card">
         <p class="klabel">weather</p>
@@ -67,21 +108,24 @@
         <h3>Alarm keypad</h3>
         <p>A full <b>Alarmo</b> keypad — arm away, arm home, disarm, live status. The security
           surface, right by the door.</p>
-        <div class="pt-shot"><img class="zoom" src="assets/img/alarm.png" alt="Alarm keypad on the panel" width="480" height="480" loading="lazy"></div>
+        <div class="pt-shot"><img class="zoom" src="assets/gallery/terracotta--alarm.webp" alt="Alarm keypad on the panel in the Terracotta style" width="480" height="480" loading="lazy"></div>
+        <p class="pt-theme">Style · <b>Terracotta</b></p>
       </div>
       <div class="card">
         <p class="klabel">camera</p>
         <h3>Live camera</h3>
-        <p>Streams live MJPEG in-panel with PTZ, and detects a dead stream by hashing pixels —
-          a frozen feed never masquerades as live.</p>
-        <div class="pt-shot"><img class="zoom" src="assets/img/camera.png" alt="Camera page on the panel" width="480" height="480" loading="lazy"></div>
+        <p>Streams your camera in-panel with pan, tilt and zoom — and notices when a feed
+          freezes, so a dead stream never passes for a live one.</p>
+        <div class="pt-shot"><img class="zoom" src="assets/gallery/carbon-weave--camera.webp" alt="Camera page on the panel in the Carbon Weave style" width="480" height="480" loading="lazy"></div>
+        <p class="pt-theme">Style · <b>Carbon Weave</b></p>
       </div>
       <div class="card">
         <p class="klabel">music</p>
         <h3>Music</h3>
         <p>A media surface with transport and volume, wired to Home Assistant media players and
           Music Assistant.</p>
-        <div class="pt-shot"><img class="zoom" src="assets/img/music.png" alt="Music page on the panel" width="480" height="480" loading="lazy"></div>
+        <div class="pt-shot"><img class="zoom" src="assets/gallery/hifi-90--music.webp" alt="Music page on the panel in the Hi-Fi '90 style" width="480" height="480" loading="lazy"></div>
+        <p class="pt-theme">Style · <b>Hi-Fi '90</b></p>
       </div>
     </div>
   </section>
@@ -115,7 +159,7 @@
 
   <!-- SECURITY & ALERTS -->
   <section class="wrap section">
-    <div class="sec-head"><h2>Security &amp; alerts</h2><span class="tone">it protects the room, too</span></div>
+    <div class="sec-head"><h2>Security &amp; alerts</h2><span class="tone">alarm · siren · notifications</span></div>
     <div class="grid cols-3">
       <div class="card">
         <div class="ico">🔐</div>
@@ -128,9 +172,9 @@
         <div class="ico">🚨</div>
         <p class="klabel">siren</p>
         <h3>On-screen siren</h3>
-        <p>When the alarm trips, the whole panel becomes a siren — a full-screen police-flash and
-          a loud looping tone. It's the top audio priority: never ducked, never talked over, and
-          Home Assistant can't accidentally silence it — only a deliberate stop-everything does.</p>
+        <p>When the alarm trips, the panel turns into a siren — a full-screen flashing alert and
+          a loud looping tone. It holds the top audio priority: never ducked, never talked over,
+          and an ordinary Home Assistant call can't silence it — only a deliberate stop can.</p>
       </div>
       <div class="card">
         <div class="ico">🔔</div>
@@ -155,14 +199,14 @@
     <div class="hero-grid" style="align-items:center">
       <div>
         <p class="brand">Eyes on the door</p>
-        <h2>Live camera that tells the truth</h2>
-        <p class="lede">MJPEG plays inside the panel with pan / tilt / zoom. When a stream dies,
-          Chromium keeps showing the last frame forever — so the panel hashes pixels to actually
-          know the feed is alive. A dead camera can't fake it.</p>
+        <h2>A live camera you can trust</h2>
+        <p class="lede">Your camera streams right on the panel, with pan, tilt and zoom. And if
+          the feed quietly drops, the panel spots the frozen picture and flags it — so a stuck
+          frame never sits there looking perfectly live.</p>
         <div class="chips pad-top">
-          <span class="chip">Live MJPEG</span>
-          <span class="chip">PTZ controls</span>
-          <span class="chip accent">Liveness by pixel-hash</span>
+          <span class="chip">Live stream</span>
+          <span class="chip">Pan · tilt · zoom</span>
+          <span class="chip accent">Frozen-feed detection</span>
         </div>
       </div>
       <figure class="device"><figcaption>Camera</figcaption>
@@ -172,7 +216,7 @@
 
   <!-- SENSORS -->
   <section class="wrap section">
-    <div class="sec-head"><h2>It senses the room</h2><span class="tone">onboard sensors</span></div>
+    <div class="sec-head"><h2>Built-in sensors</h2><span class="tone">presence &amp; light</span></div>
     <div class="grid cols-2">
       <div class="card">
         <div class="ico">🚶</div>
@@ -241,7 +285,7 @@
     <div class="hero-grid" style="align-items:center">
       <div>
         <p class="brand">Built for the wall</p>
-        <h2>A proper kiosk, not a launcher hack</h2>
+        <h2>A real kiosk build</h2>
         <p class="lede">Purpose-built for the NSPanel Pro hardware and nothing else.</p>
         <div class="chips pad-top">
           <span class="chip">Immersive fullscreen</span>
@@ -258,8 +302,8 @@
   </section>
 
   <section class="wrap section center">
-    <h2>Ready to see it dressed up?</h2>
-    <p class="lede center">Thirty-two styles on the same two grids — then pick a licence.</p>
+    <h2>See it in every style.</h2>
+    <p class="lede center">Thirty-two styles across an example panel — then pick a licence.</p>
     <div class="btn-row center">
       <a class="btn btn-primary" href="gallery.html">Open the gallery</a>
       <a class="btn" href="licensing.html#buy">See pricing →</a>

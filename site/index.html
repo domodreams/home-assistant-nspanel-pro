@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DomoDreams NSPanel Pro — a control panel you'd want on your wall</title>
-<meta name="description" content="Turn a Sonoff NSPanel Pro into a gorgeous, fully-custom Home Assistant control panel. Curated styles, 32 of them, driven over MQTT, configured from a visual editor in the HA sidebar.">
+<meta name="description" content="Turn a Sonoff NSPanel Pro into a fully-custom Home Assistant control panel — pre-rendered surfaces, 32 curated styles, driven over MQTT and configured from a visual editor in the Home Assistant sidebar.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f93b4'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -31,10 +31,10 @@
     <div class="hero-grid">
       <div>
         <p class="brand">DomoDreams · NSPanel Pro</p>
-        <h1>A control panel you'd actually want on your wall.</h1>
+        <h1>A control panel you'd want on your wall.</h1>
         <p class="lede">Turn a Sonoff NSPanel Pro into a fully-custom Home Assistant
-          panel — soft, crafted surfaces, 32 curated styles, and every button laid out
-          visually from the HA sidebar. All local, all over MQTT, no cloud.</p>
+          panel — pre-rendered surfaces, 32 curated styles, and every button laid out
+          visually from the Home Assistant sidebar. All local, over MQTT, no cloud.</p>
         <div class="btn-row">
           <a class="btn btn-primary" href="features.html">Explore the features</a>
           <a class="btn" href="gallery.html">See 32 styles →</a>
@@ -63,10 +63,10 @@
     <div class="grid cols-3">
       <div class="card">
         <div class="ico">🎛️</div>
-        <p class="klabel">Premium by default</p>
-        <h3>A crafted UI, not a dashboard</h3>
-        <p>Soft, pre-rendered surfaces tuned for the panel's low-power GPU. It reads
-          as a designed object, not a browser tab pinned to the wall.</p>
+        <p class="klabel">Crafted surfaces</p>
+        <h3>A designed UI, not a web dashboard</h3>
+        <p>Soft, pre-rendered surfaces tuned for the panel's low-power GPU, so it stays
+          crisp and reads like a designed object rather than a web page on a screen.</p>
       </div>
       <div class="card">
         <div class="ico">🧩</div>
@@ -101,7 +101,7 @@
         <p class="klabel">Resilient</p>
         <h3>Boots offline</h3>
         <p>The panel renders from retained topics and a local cache. Broker or HA
-          down? It still shows your last-known UI. Your walls don't phone home.</p>
+          down? It still shows your last-known UI.</p>
       </div>
     </div>
   </section>
@@ -112,8 +112,8 @@
       <h2>Typed pages, swipe between them</h2>
       <span class="tone">grid · clock · weather · alarm · camera · music</span>
     </div>
-    <p class="lede" style="margin-bottom:26px">Mix and match per panel. Every page type
-      is a first-class citizen with its own layout and behavior.</p>
+    <p class="lede" style="margin-bottom:26px">Add as many pages as you want per panel and
+      mix the types freely — each one brings its own layout and behaviour.</p>
     <div class="grid cols-3">
       <figure class="device"><figcaption>Grid</figcaption>
         <img src="assets/img/grid.png" alt="Button grid" width="480" height="480"></figure>
@@ -128,15 +128,36 @@
     </div>
   </section>
 
+  <!-- ADMIN GUI -->
+  <section class="wrap section">
+    <div class="hero-grid" style="align-items:center">
+      <div>
+        <p class="brand">In the Home Assistant sidebar</p>
+        <h2>Build it by clicking, not by hand</h2>
+        <p class="lede">A visual editor lives right inside Home Assistant. Drag tiles onto the
+          grid, pick the entity each one controls, and watch a live preview of the panel update
+          as you go — then push it to the wall over the air.</p>
+        <dl class="deflist pad-top">
+          <div class="row"><dt>preview</dt><dd><b>Live WYSIWYG.</b> <span>The middle pane mirrors the real panel as you edit.</span></dd></div>
+          <div class="row"><dt>pages</dt><dd><b>Every page type.</b> <span>Grid, clock, weather, alarm, camera, music — added and ordered visually.</span></dd></div>
+          <div class="row"><dt>push</dt><dd><b>Over the air.</b> <span>Save &amp; Push sends changes to the panel; ADB installs app updates.</span></dd></div>
+        </dl>
+      </div>
+      <figure class="gui-shot"><img src="assets/img/editor-layout.jpg"
+        alt="The DomoDreams visual editor in Home Assistant — pages list, live panel preview and inspector"
+        width="1054" height="800" loading="lazy"></figure>
+    </div>
+  </section>
+
   <!-- THEMES TEASER -->
   <section class="wrap section">
     <div class="card" style="display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; padding:30px">
       <div>
         <p class="brand" style="margin-bottom:10px">Thirty-two styles, one panel</p>
         <h2 style="margin-bottom:8px">From soft matte to wood &amp; brass</h2>
-        <p class="lede">Every curated style rendered on the same two grids — light
-          and dark, minimal and maximal. Pick one from a dropdown and change the whole
-          feel of the wall.</p>
+        <p class="lede">Every curated style, shown on the same example pages — light
+          and dark, minimal and maximal. Pick one from a dropdown and the whole panel
+          restyles at once.</p>
       </div>
       <a class="btn btn-primary" href="gallery.html">Open the gallery</a>
     </div>
