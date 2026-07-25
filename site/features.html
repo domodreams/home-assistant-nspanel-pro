@@ -7,6 +7,15 @@
 <meta name="description" content="Typed pages, tactile tiles, a live camera, an Alarmo keypad, an on-screen siren and notifications, presence and light sensors, 32 curated styles — all configured from Home Assistant.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f93b4'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MX6EL7G86P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MX6EL7G86P');
+</script>
 </head>
 <body>
 
@@ -97,11 +106,11 @@
       </div>
       <div class="card">
         <p class="klabel">weather</p>
-        <h3>Weather <span class="chip" style="vertical-align:middle">soon</span></h3>
-        <p>An at-a-glance weather page driven by your Home Assistant weather entity — themed to
-          match the rest of the wall.</p>
-        <div class="ph soon"><span class="ph-ico">⛅</span><span class="ph-t">Coming soon</span>
-          <span class="ph-s">In active development</span></div>
+        <h3>Weather</h3>
+        <p>Current conditions with pressure, humidity and wind, plus a daily and hourly forecast —
+          mirrored from your Home Assistant weather entity and themed to match the wall.</p>
+        <div class="pt-shot"><img class="zoom" src="assets/gallery/coastal--weather.webp" alt="Weather page on the panel in the Coastal style" width="480" height="480" loading="lazy"></div>
+        <p class="pt-theme">Style · <b>Coastal</b></p>
       </div>
       <div class="card">
         <p class="klabel">alarm</p>
@@ -144,6 +153,7 @@
           <div class="row"><dt>switcher</dt><dd><b>Multi-state.</b> <span>Cycle through fixed options with a tap.</span></dd></div>
           <div class="row"><dt>split</dt><dd><b>Two actions, one tile.</b> <span>Independent halves for tight layouts.</span></dd></div>
           <div class="row"><dt>rocker</dt><dd><b>Cover &amp; blind control.</b> <span>Up / stop / down, physical-feeling.</span></dd></div>
+          <div class="row"><dt>text</dt><dd><b>Live readouts.</b> <span>Icon · value · label columns — sensor states or attributes, fixed text, no controls. Stack two rows in one tile.</span></dd></div>
           <div class="row"><dt>scene bar</dt><dd><b>One-tap scenes.</b> <span>A row of shortcuts pinned across the grid.</span></dd></div>
         </dl>
       </div>

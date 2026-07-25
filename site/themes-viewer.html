@@ -156,6 +156,14 @@
   /* recess is a real .surf.inset overlay, so it matches the inset state buttons
      exactly for every theme (incl. Oak Wood's photographic inset) */
   .p-split .p-seg-recess{position:absolute;left:0;top:0;bottom:0;width:50%;border-radius:var(--radius) 0 0 var(--radius)}
+  /* text readout tile — icon · value · label columns (the `text` tile type) */
+  .p-text{padding:0 8px}
+  .p-tcol{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0}
+  .p-tico{color:var(--accent-ink,var(--accent));line-height:0}
+  .p-tico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;display:block}
+  .p-tval{font-size:15px;font-weight:800;color:var(--ink,var(--muted))}
+  .p-tlbl{font-size:10px;font-weight:600;color:var(--muted)}
+  .p-tdiv{flex:0 0 auto;width:1px;height:50%;background:var(--raised-dark);opacity:.5}
   /* analog clock */
   .aclock{width:360px;height:360px;border-radius:20px;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.45)}
   .aclock svg{position:absolute;inset:0}
@@ -213,6 +221,15 @@
      exactly like the app: those never use the baked .surf::after / .surf.on LED. */
   .surf.no-led::after{content:none !important}
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MX6EL7G86P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MX6EL7G86P');
+</script>
 </head>
 <body>
 
@@ -1632,6 +1649,7 @@ const SHUTTER = '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="1
 const SCENE = '<svg viewBox="0 0 24 24"><path d="M12 4l2.2 4.5 5 .7-3.6 3.5.9 5L12 15.4 7.5 17.7l.9-5L4.8 9.2l5-.7z"/></svg>';
 const SUN_LOW = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 6v.5M12 17.5v.5M6 12h.5M17.5 12h.5"/></svg>';
 const SUN_HIGH = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2.4M12 18.6v2.4M3 12h2.4M18.6 12h2.4M6 6l1.7 1.7M16.3 16.3 18 18M18 6l-1.7 1.7M6 18l1.7-1.7"/></svg>';
+const DROP = '<svg viewBox="0 0 24 24"><path d="M12 4c3 4 5 6.5 5 9.5a5 5 0 1 1-10 0c0-3 2-5.5 5-9.5z"/></svg>';
 function pspan(surf, cs, rs) { if (cs) surf.style.gridColumn = 'span ' + cs; if (rs) surf.style.gridRow = 'span ' + rs; return surf; }
 function pbtn(icon, label, on, dot, cs) {
   const s = el('div', 'surf raised s-1x1 p-btn' + (on ? ' on' : ''));
@@ -1685,6 +1703,19 @@ function pstate(icon, label, mode, on) {
     '<span class="p-lbl' + (on ? ' on' : '') + '">' + label + '</span>';
   return s;
 }
+// text readout tile: icon · value · label columns on a shared raised surface
+function ptext(cols) {
+  const s = el('div', 'surf raised p-text no-led');
+  s.innerHTML = cols
+    .map(
+      (c, i) =>
+        (i ? '<div class="p-tdiv"></div>' : '') +
+        '<div class="p-tcol"><span class="p-tico">' + c[0] + '</span>' +
+        '<span class="p-tval">' + c[1] + '</span><span class="p-tlbl">' + c[2] + '</span></div>',
+    )
+    .join('');
+  return s;
+}
 // explicit 1-indexed grid placement (col,row[,colSpan,rowSpan])
 function place(surf, col, row, cs, rs) {
   surf.style.gridColumn = (cs && cs > 1) ? (col + ' / span ' + cs) : String(col);
@@ -1733,8 +1764,7 @@ function panelHorizontal(t) {
   applyGround(p);
   p.append(
     place(pbtn(BULB, 'All Lights', true, false), 1, 1, 4, 1),        // row1: full-width button, ON
-    place(pbtn(POWER, 'Scene', false, false), 1, 2, 2, 1),           // row2 left: half-width button
-    place(pbtn(THERMO, 'Climate', false, true), 3, 2, 2, 1),         // row2 right: half-width button
+    place(ptext([[THERMO, '22.4°', 'Temp'], [DROP, '38%', 'Humidity'], [SUN_HIGH, '1013', 'hPa']]), 1, 2, 4, 1), // row2: text readout — icon·value·label columns
     place(pdim(false, 3, 6, false, [SUN_LOW, SUN_HIGH]), 1, 3, 4, 1),// row3: full-width horizontal dimmer
     place(prockerTile('Outlets', true), 1, 4, 4, 1),                 // row4: full-width rocker
   );

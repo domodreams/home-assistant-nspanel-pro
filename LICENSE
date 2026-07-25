@@ -1,3 +1,28 @@
+DomoDreams Panel — Licensing
+============================
+
+This repository contains components released under DIFFERENT licenses. Which
+license applies depends on the component:
+
+  * Home Assistant integration  →  custom_components/domodreams_panel/**
+        MIT License (Section 1 below) — open source.
+
+  * DomoDreams NSPanel Pro app   →  the Android APK distributed as a binary in
+                                     this repository's GitHub Releases
+        Proprietary (Section 2 below) — free to use, NOT open source.
+
+  * Brand assets & screenshots   →  images/**, README media, DomoDreams name,
+                                     logos and the panel's visual design
+        Proprietary (Section 2 below).
+
+Nothing in Section 1 grants any right to the app binary or the brand assets
+covered by Section 2, and nothing in Section 2 restricts your MIT rights to the
+integration source in Section 1.
+
+--------------------------------------------------------------------------------
+SECTION 1 — Home Assistant integration (MIT License)
+--------------------------------------------------------------------------------
+
 MIT License
 
 Copyright (c) 2026 Manuele Cappelleri (DomoDreams)
@@ -19,3 +44,42 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+--------------------------------------------------------------------------------
+SECTION 2 — DomoDreams Panel app & brand assets (Proprietary)
+--------------------------------------------------------------------------------
+
+Copyright (c) 2026 Manuele Cappelleri (DomoDreams). All rights reserved.
+
+The "DomoDreams NSPanel Pro" application (distributed as an Android APK in this
+repository's Releases), together with the DomoDreams name and logos, the panel's
+visual design, themes and the screenshots/images in this repository, is
+proprietary and is NOT open source.
+
+You are granted a personal, non-exclusive, non-transferable, revocable license to
+download and run the app, as distributed, on Sonoff NSPanel Pro devices you own
+or control, free of charge, subject to the following. You may NOT, in whole or in
+part:
+
+  1. redistribute, resell, sublicense, rent or lend the app or its binaries;
+  2. decompile, disassemble, reverse-engineer or otherwise attempt to derive the
+     source code, except to the extent this restriction is prohibited by
+     applicable law;
+  3. modify, patch or create derivative works of the app;
+  4. remove, disable or circumvent the licensing, watermark or any technical
+     protection measure, or use the app without a valid licence where one is
+     required;
+  5. use the DomoDreams name, logos or brand assets to imply endorsement, or for
+     any commercial purpose, without prior written permission.
+
+The app may contain or fetch open-source third-party components, each of which
+remains under its own license; those licenses are unaffected by this Section.
+
+THE APP AND ASSETS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. TO THE
+MAXIMUM EXTENT PERMITTED BY LAW, THE COPYRIGHT HOLDER SHALL NOT BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM OR IN CONNECTION WITH THE APP,
+THE ASSETS, OR THEIR USE. This license terminates automatically if you breach
+any of its terms.
+
+DomoDreams is not affiliated with Sonoff/ITEAD or with Home Assistant / Nabu
+Casa. Product names are trademarks of their respective owners.
